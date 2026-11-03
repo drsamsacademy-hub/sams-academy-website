@@ -109,6 +109,8 @@ export default function Admin() {
             <option>APPGCET Zoology</option>
             <option>Life Sciences</option>
             <option>CSIR NET</option>
+                        <option>Syllabus</option>
+            <option>Previous Papers</option>
           </select>
         </div>
 

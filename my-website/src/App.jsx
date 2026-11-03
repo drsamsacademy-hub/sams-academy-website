@@ -3,6 +3,7 @@ import { BookOpen, Sparkles, Target, TrendingUp } from 'lucide-react';
 import Admin from './pages/Admin';
 import Materials from './pages/Materials';
 import Books from './pages/Books';
+import Resources from './pages/Resources';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -32,7 +33,9 @@ export default function App() {
   if (window.location.pathname === '/books') {
     return <Books />;
   }
-
+  if (window.location.pathname === '/resources') {
+    return <Resources />;
+  }
   // Otherwise, show the Homepage
   return (
     <div className="min-h-screen">
@@ -48,6 +51,7 @@ export default function App() {
             <a href="/admin" className="hover:text-brand-600 transition">Admin</a>
             <a href="/materials" className="hover:text-brand-600 transition">Materials</a>
             <a href="/books" className="hover:text-brand-600 transition">Books</a>
+            <a href="/resources" className="hover:text-brand-600 transition">Resources</a>
           </div>
         </div>
       </nav>
