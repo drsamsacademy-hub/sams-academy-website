@@ -8,6 +8,7 @@ db.exec(`
     category TEXT NOT NULL,
     content TEXT NOT NULL,
     link_url TEXT,
+    file_url TEXT,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
   );
 `);

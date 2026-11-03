@@ -6,11 +6,12 @@ export default function Admin() {
     category: 'Indian History',
     content: '',
     password: '',
-    link_url: ''
+    link_url: '',
+     file_url: '' //
   });
   const [message, setMessage] = useState('');
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('Publishing...');
 
@@ -19,22 +20,32 @@ export default function Admin() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-      // 2. Send the request
+      // 2. Prepare the data (FormData is required for files)
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('content', formData.content);
+      formDataToSend.append('password', formData.password);
+      if (formData.link_url) formDataToSend.append('link_url', formData.link_url);
+      if (formData.file_url) formDataToSend.append('file', formData.file_url);
+
+      // 3. Send the request
       const response = await fetch('https://sams-academy-plus.onrender.com/api/posts', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: formDataToSend, // We send the FormData here
         signal: controller.signal
+        // Notice: We completely removed the "headers: { 'Content-Type': 'application/json' }" line!
       });
 
-      // 3. Clear the timeout once the request finishes
+      // 4. Clear the timeout once the request finishes
       clearTimeout(timeoutId);
 
       const data = await response.json();
 
       if (response.ok) {
         setMessage('✅ Material published successfully!');
-        setFormData({ ...formData, title: '', content: '', link_url: '' }); // Clear form
+        // Clear form (reset the file input and link)
+        setFormData({ ...formData, title: '', content: '', link_url: '', file_url: '' }); 
       } else {
         setMessage('❌ Error: ' + data.error);
       }
@@ -124,7 +135,17 @@ export default function Admin() {
             placeholder="https://..."
           />
         </div>
-
+        {/* File Upload Input */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Upload PDF / Word / Image (Optional)</label>
+          <input 
+            type="file"
+            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+            onChange={(e) => setFormData({...formData, file_url: e.target.files[0]})}
+            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none bg-gray-50"
+          />
+          <p className="text-xs text-gray-400 mt-1">Max size: 10MB</p>
+        </div>
         <button type="submit" className="w-full bg-brand-600 text-white font-bold py-3 rounded-lg hover:bg-brand-700 transition">
           Publish Material
         </button>
