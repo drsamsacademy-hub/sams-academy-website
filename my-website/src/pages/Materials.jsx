@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Link as LinkIcon } from 'lucide-react';
+import { ArrowLeft, Link as LinkIcon, Download } from 'lucide-react';
 
 const CATEGORIES = [
   'All', 'Indian History', 'AP History', 'Geography', 
