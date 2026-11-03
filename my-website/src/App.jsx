@@ -1,6 +1,6 @@
-import Admin from './pages/Admin';
 import { motion } from 'framer-motion';
 import { BookOpen, Sparkles, Target, TrendingUp } from 'lucide-react';
+import Admin from './pages/Admin';
 import Materials from './pages/Materials';
 import Books from './pages/Books';
 
@@ -12,24 +12,28 @@ const SUBJECTS = [
   { name: 'Economy', icon: '📈' },
   { name: 'Society', icon: '👥' },
   { name: 'Current Affairs', icon: '📰' },
-  { name: 'Mental Ability', icon: '🧠' }
-    { name: 'Assessments', icon: '📝' },
+  { name: 'Mental Ability', icon: '🧠' },
+  { name: 'Assessments', icon: '📝' },
   { name: 'APPGCET Zoology', icon: '🔬' },
   { name: 'Life Sciences', icon: '🧬' },
-  { name: 'CSIR NET', icon: '🎓' },
+  { name: 'CSIR NET', icon: '🎓' }
 ];
 
 export default function App() {
-  // Check if the URL is /admin
+  // Check the URL to show the right page
   if (window.location.pathname === '/admin') {
     return <Admin />;
   }
-    if (window.location.pathname === '/materials') {
+
+  if (window.location.pathname === '/materials') {
     return <Materials />;
   }
+
   if (window.location.pathname === '/books') {
     return <Books />;
   }
+
+  // Otherwise, show the Homepage
   return (
     <div className="min-h-screen">
       {/* Navbar */}
@@ -40,7 +44,7 @@ export default function App() {
             <span className="text-brand-600">Academy</span>
           </div>
           <div className="flex gap-6 font-medium text-gray-600">
-            <a href="#" className="hover:text-brand-600 transition">Home</a>
+            <a href="/" className="hover:text-brand-600 transition">Home</a>
             <a href="/admin" className="hover:text-brand-600 transition">Admin</a>
             <a href="/materials" className="hover:text-brand-600 transition">Materials</a>
             <a href="/books" className="hover:text-brand-600 transition">Books</a>
@@ -62,11 +66,11 @@ export default function App() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
             className="mt-6 text-lg md:text-xl text-gray-600 max-w-2xl mx-auto"
           >
-            Daily curated notes across 8 core subjects — built for Gen Z aspirants
+            Daily curated notes across core subjects — built for Gen Z aspirants
             who want smart, focused prep. 🚀
           </motion.p>
           <div className="mt-8 flex gap-4 justify-center flex-wrap">
-            <a href="#subjects"
+            <a href="/materials"
               className="px-8 py-3 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-700 transition shadow-lg shadow-brand-500/30">
               Explore Materials
             </a>
@@ -77,7 +81,7 @@ export default function App() {
           </div>
           <div className="mt-12 flex gap-8 justify-center text-sm text-gray-600 flex-wrap">
             <div className="flex items-center gap-2"><BookOpen size={18}/> Daily notes</div>
-            <div className="flex items-center gap-2"><Target size={18}/> 8 subjects</div>
+            <div className="flex items-center gap-2"><Target size={18}/> Multiple subjects</div>
             <div className="flex items-center gap-2"><TrendingUp size={18}/> Expert curated</div>
           </div>
         </div>
@@ -94,11 +98,11 @@ export default function App() {
             <motion.div key={cat.name}
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
-              <a href={`/materials?cat=${encodeURIComponent(cat.name)}`} className="block p-6 bg-white rounded-2xl border border-gray-100 hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition cursor-pointer"></a>
+              <a href={`/materials?cat=${encodeURIComponent(cat.name)}`} className="block p-6 bg-white rounded-2xl border border-gray-100 hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition cursor-pointer">
                 <div className="text-4xl mb-3">{cat.icon}</div>
                 <h3 className="font-semibold text-gray-800">{cat.name}</h3>
                 <p className="text-sm text-gray-500 mt-1">View notes →</p>
-</a>
+              </a>
             </motion.div>
           ))}
         </div>
