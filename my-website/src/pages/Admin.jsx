@@ -13,13 +13,37 @@ export default function Admin() {
     e.preventDefault();
     setMessage('Publishing...');
 
-    try {
+       try {
+      // 1. Set up a 60-second timeout to wake up the free Render server
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+      // 2. Send the request
       const response = await fetch('https://sams-academy-plus.onrender.com/api/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        signal: controller.signal
       });
 
+      // 3. Clear the timeout once the request finishes
+      clearTimeout(timeoutId);
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage('✅ Material published successfully!');
+        setFormData({ ...formData, title: '', content: '' }); // Clear form
+      } else {
+        setMessage('❌ Error: ' + data.error);
+      }
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        setMessage('❌ Server took too long to wake up. Please try again.');
+      } else {
+        setMessage('❌ Could not connect to the server.');
+      }
+    }
       const data = await response.json();
 
       if (response.ok) {
