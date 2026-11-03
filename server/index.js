@@ -14,18 +14,17 @@ app.get('/api/posts', (req, res) => {
 
 // 2. Create a new post (for you to publish notes)
 app.post('/api/posts', (req, res) => {
-  const { title, category, content, password } = req.body;
+  const { title, category, content, password, link_url } = req.body;
   
-  if (password !== 'SamsAcademy2026!') {
+  if (password !== 'SamsAcademy2026!') { // Make sure this is your new password!
     return res.status(401).json({ error: 'Wrong password' });
   }
 
-  const insert = db.prepare('INSERT INTO posts (title, category, content) VALUES (?, ?, ?)');
-  insert.run(title, category, content);
+  const insert = db.prepare('INSERT INTO posts (title, category, content, link_url) VALUES (?, ?, ?, ?)');
+  insert.run(title, category, content, link_url || null);
   
   res.json({ success: true, message: 'Post created!' });
 });
-// Delete test notes (We will remove this after you run it once)
 
 app.listen(4000, () => {
   console.log('✅ Server running on http://localhost:4000');

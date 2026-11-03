@@ -2,6 +2,7 @@ import Admin from './pages/Admin';
 import { motion } from 'framer-motion';
 import { BookOpen, Sparkles, Target, TrendingUp } from 'lucide-react';
 import Materials from './pages/Materials';
+import Books from './pages/Books';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -22,7 +23,9 @@ export default function App() {
     if (window.location.pathname === '/materials') {
     return <Materials />;
   }
-
+  if (window.location.pathname === '/books') {
+    return <Books />;
+  }
   return (
     <div className="min-h-screen">
       {/* Navbar */}
@@ -36,6 +39,7 @@ export default function App() {
             <a href="#" className="hover:text-brand-600 transition">Home</a>
             <a href="/admin" className="hover:text-brand-600 transition">Admin</a>
             <a href="/materials" className="hover:text-brand-600 transition">Materials</a>
+            <a href="/books" className="hover:text-brand-600 transition">Books</a>
           </div>
         </div>
       </nav>

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 
 export default function Admin() {
-  const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({
     title: '',
     category: 'Indian History',
     content: '',
-    password: ''
+    password: '',
+    link_url: '' // <--- Add this line
   });
   const [message, setMessage] = useState('');
 
@@ -110,6 +111,17 @@ export default function Admin() {
         {/* Content */}
         <div>
           <label className="block text-sm font-medium text-gray-700">Content (Paste from Word)</label>
+                  {/* Link Input */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Link (YouTube / Google Form / PDF)</label>
+          <input 
+            type="url"
+            value={formData.link_url || ''}
+            onChange={(e) => setFormData({...formData, link_url: e.target.value})}
+            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
+            placeholder="https://..."
+          />
+        </div>
           <textarea 
             required rows="10"
             value={formData.content}
