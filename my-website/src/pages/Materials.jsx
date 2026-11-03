@@ -91,3 +91,26 @@ export default function Materials() {
     </div>
   );
 }
+              {/* Smart Link Button (YouTube / Google Form) */}
+              {post.link_url && (
+                <a 
+                  href={post.link_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-5 py-2.5 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition mr-3 mb-3"
+                >
+                  <LinkIcon size={18} className="mr-2" /> Open Link / Resource
+                </a>
+              )}
+
+              {/* NEW: File Download Button */}
+              {post.file_url && (
+                <a 
+                  href={post.file_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-5 py-2.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition mb-3"
+                >
+                  <Download size={18} className="mr-2" /> Download File
+                </a>
+              )}
