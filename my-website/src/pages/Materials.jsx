@@ -6,7 +6,7 @@ export default function Materials() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/posts')
+    fetch('https://sams-academy-plus.onrender.com/api/posts')
       .then(res => res.json())
       .then(data => {
         setPosts(data);
