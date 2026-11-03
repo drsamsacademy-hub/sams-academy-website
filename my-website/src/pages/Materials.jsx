@@ -14,8 +14,7 @@ export default function Materials() {
   const initialCategory = queryParams.get('cat') || 'All';
     const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState('All');
-
+ const [activeCategory, setActiveCategory] = useState(initialCategory);
   useEffect(() => {
     fetch('https://sams-academy-plus.onrender.com/api/posts')
       .then(res => res.json())

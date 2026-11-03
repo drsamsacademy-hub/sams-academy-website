@@ -98,7 +98,7 @@ export default function App() {
                 <div className="text-4xl mb-3">{cat.icon}</div>
                 <h3 className="font-semibold text-gray-800">{cat.name}</h3>
                 <p className="text-sm text-gray-500 mt-1">View notes →</p>
-              </div>
+</a>
             </motion.div>
           ))}
         </div>
