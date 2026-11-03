@@ -1,0 +1,22 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+/* (Keep the rest of your fonts and gradient-text code below this) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f7f8fc;
+  color: #111827;
+}
+h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+
+.gradient-text {
+  background: linear-gradient(90deg, #4f6df5, #ff6b9a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
