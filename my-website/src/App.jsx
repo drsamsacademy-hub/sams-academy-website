@@ -13,6 +13,10 @@ const SUBJECTS = [
   { name: 'Society', icon: '👥' },
   { name: 'Current Affairs', icon: '📰' },
   { name: 'Mental Ability', icon: '🧠' }
+    { name: 'Assessments', icon: '📝' },
+  { name: 'APPGCET Zoology', icon: '🔬' },
+  { name: 'Life Sciences', icon: '🧬' },
+  { name: 'CSIR NET', icon: '🎓' },
 ];
 
 export default function App() {
@@ -90,7 +94,7 @@ export default function App() {
             <motion.div key={cat.name}
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
-              <div className="block p-6 bg-white rounded-2xl border border-gray-100 hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition cursor-pointer">
+              <a href={`/materials?cat=${encodeURIComponent(cat.name)}`} className="block p-6 bg-white rounded-2xl border border-gray-100 hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition cursor-pointer"></a>
                 <div className="text-4xl mb-3">{cat.icon}</div>
                 <h3 className="font-semibold text-gray-800">{cat.name}</h3>
                 <p className="text-sm text-gray-500 mt-1">View notes →</p>

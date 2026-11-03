@@ -9,7 +9,10 @@ const CATEGORIES = [
 ];
 
 export default function Materials() {
-  const [posts, setPosts] = useState([]);
+      // Read the category from the URL (e.g., /materials?cat=Geography)
+  const queryParams = new URLSearchParams(window.location.search);
+  const initialCategory = queryParams.get('cat') || 'All';
+    const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
 
