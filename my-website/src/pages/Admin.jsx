@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
 export default function Admin() {
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     title: '',
     category: 'Indian History',
     content: '',
     password: '',
-    link_url: '' // <--- Add this line
+    link_url: ''
   });
   const [message, setMessage] = useState('');
 
@@ -14,7 +14,7 @@ export default function Admin() {
     e.preventDefault();
     setMessage('Publishing...');
 
-       try {
+    try {
       // 1. Set up a 60-second timeout to wake up the free Render server
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 60000);
@@ -34,7 +34,7 @@ export default function Admin() {
 
       if (response.ok) {
         setMessage('✅ Material published successfully!');
-        setFormData({ ...formData, title: '', content: '' }); // Clear form
+        setFormData({ ...formData, title: '', content: '', link_url: '' }); // Clear form
       } else {
         setMessage('❌ Error: ' + data.error);
       }
@@ -44,17 +44,6 @@ export default function Admin() {
       } else {
         setMessage('❌ Could not connect to the server.');
       }
-    }
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage('✅ Material published successfully!');
-        setFormData({ ...formData, title: '', content: '' }); // Clear form
-      } else {
-        setMessage('❌ Error: ' + data.error);
-      }
-    } catch (err) {
-      setMessage('❌ Could not connect to the server.');
     }
   };
 
@@ -73,7 +62,7 @@ export default function Admin() {
             value={formData.password}
             onChange={(e) => setFormData({...formData, password: e.target.value})}
             className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
-            placeholder="Enter password (admin123)"
+            placeholder="Enter your secret password"
           />
         </div>
 
@@ -105,29 +94,34 @@ export default function Admin() {
             <option>Society</option>
             <option>Current Affairs</option>
             <option>Mental Ability</option>
+            <option>Assessments</option>
+            <option>APPGCET Zoology</option>
+            <option>Life Sciences</option>
+            <option>CSIR NET</option>
           </select>
         </div>
 
         {/* Content */}
         <div>
           <label className="block text-sm font-medium text-gray-700">Content (Paste from Word)</label>
-                  {/* Link Input */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Link (YouTube / Google Form / PDF)</label>
-          <input 
-            type="url"
-            value={formData.link_url || ''}
-            onChange={(e) => setFormData({...formData, link_url: e.target.value})}
-            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
-            placeholder="https://..."
-          />
-        </div>
           <textarea 
             required rows="10"
             value={formData.content}
             onChange={(e) => setFormData({...formData, content: e.target.value})}
             className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none font-mono text-sm"
             placeholder="Paste your notes here..."
+          />
+        </div>
+
+        {/* Link Input */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Link (YouTube / Google Form / PDF)</label>
+          <input 
+            type="url"
+            value={formData.link_url}
+            onChange={(e) => setFormData({...formData, link_url: e.target.value})}
+            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
+            placeholder="https://..."
           />
         </div>
 
