@@ -16,7 +16,7 @@ app.get('/api/posts', (req, res) => {
 app.post('/api/posts', (req, res) => {
   const { title, category, content, password } = req.body;
   
-  if (password !== 'admin123') {
+  if (password !== 'SamsAcademy2026!') {
     return res.status(401).json({ error: 'Wrong password' });
   }
 
@@ -25,7 +25,11 @@ app.post('/api/posts', (req, res) => {
   
   res.json({ success: true, message: 'Post created!' });
 });
-
+// Delete test notes (We will remove this after you run it once)
+app.get('/api/clean-db', (req, res) => {
+  db.prepare('DELETE FROM posts').run();
+  res.send('Database cleared successfully!');
+});
 app.listen(4000, () => {
   console.log('✅ Server running on http://localhost:4000');
 });
