@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Admin() {
   const [formData, setFormData] = useState({
@@ -7,25 +7,27 @@ export default function Admin() {
     content: '',
     password: '',
     link_url: '',
-     file_url: '' //
+    file_url: ''
   });
   const [message, setMessage] = useState('');
   const [allPosts, setAllPosts] = useState([]);
-    useEffect(() => {
+
+  // Fetch posts on load (and refresh whenever the message changes)
+  useEffect(() => {
     fetch('https://sams-academy-plus.onrender.com/api/posts')
       .then(res => res.json())
-      .then(data => setAllPosts(data));
-  }, [message]); // Refresh the list whenever a message changes (e.g., after posting/deleting)
-    const handleSubmit = async (e) => {
+      .then(data => setAllPosts(data))
+      .catch(err => console.error(err));
+  }, [message]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('Publishing...');
 
     try {
-      // 1. Set up a 60-second timeout to wake up the free Render server
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-      // 2. Prepare the data (FormData is required for files)
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('category', formData.category);
@@ -34,22 +36,17 @@ export default function Admin() {
       if (formData.link_url) formDataToSend.append('link_url', formData.link_url);
       if (formData.file_url) formDataToSend.append('file', formData.file_url);
 
-      // 3. Send the request
       const response = await fetch('https://sams-academy-plus.onrender.com/api/posts', {
         method: 'POST',
-        body: formDataToSend, // We send the FormData here
+        body: formDataToSend,
         signal: controller.signal
-        // Notice: We completely removed the "headers: { 'Content-Type': 'application/json' }" line!
       });
 
-      // 4. Clear the timeout once the request finishes
       clearTimeout(timeoutId);
-
       const data = await response.json();
 
       if (response.ok) {
         setMessage('✅ Material published successfully!');
-        // Clear form (reset the file input and link)
         setFormData({ ...formData, title: '', content: '', link_url: '', file_url: '' }); 
       } else {
         setMessage('❌ Error: ' + data.error);
@@ -61,14 +58,16 @@ export default function Admin() {
         setMessage('❌ Could not connect to the server.');
       }
     }
-  };  const handleDelete = async (id) => {
+  };
+
+  const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
       const response = await fetch(`https://sams-academy-plus.onrender.com/api/posts/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: formData.password }) // Uses the password you typed in the form
+        body: JSON.stringify({ password: formData.password })
       });
 
       if (response.ok) {
@@ -80,8 +79,9 @@ export default function Admin() {
       setMessage('❌ Could not connect to server.');
     }
   };
+
   return (
-    <div className="max-w-2xl mx-auto p-8 mt-10 bg-white rounded-2xl shadow-lg border border-gray-100">
+    <div className="max-w-2xl mx-auto p-8 mt-10 bg-white rounded-2xl shadow-lg border border-gray-100 mb-20">
       <h1 className="text-3xl font-display font-bold mb-6 text-gray-800">Teacher's Admin Panel</h1>
       <p className="text-gray-500 mb-6">Paste your Daily Material here to publish it to the website.</p>
 
@@ -95,7 +95,7 @@ export default function Admin() {
             value={formData.password}
             onChange={(e) => setFormData({...formData, password: e.target.value})}
             className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
-            placeholder="Enter your secret password"
+            placeholder="Enter password"
           />
         </div>
 
@@ -131,7 +131,7 @@ export default function Admin() {
             <option>APPGCET Zoology</option>
             <option>Life Sciences</option>
             <option>CSIR NET</option>
-                        <option>Syllabus</option>
+            <option>Syllabus</option>
             <option>Previous Papers</option>
           </select>
         </div>
@@ -140,7 +140,7 @@ export default function Admin() {
         <div>
           <label className="block text-sm font-medium text-gray-700">Content (Paste from Word)</label>
           <textarea 
-            required rows="10"
+            required rows="6"
             value={formData.content}
             onChange={(e) => setFormData({...formData, content: e.target.value})}
             className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none font-mono text-sm"
@@ -150,7 +150,7 @@ export default function Admin() {
 
         {/* Link Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Link (YouTube / Google Form / PDF)</label>
+          <label className="block text-sm font-medium text-gray-700">Link (YouTube / Google Form)</label>
           <input 
             type="url"
             value={formData.link_url}
@@ -159,6 +159,7 @@ export default function Admin() {
             placeholder="https://..."
           />
         </div>
+
         {/* File Upload Input */}
         <div>
           <label className="block text-sm font-medium text-gray-700">Upload PDF / Word / Image (Optional)</label>
@@ -170,13 +171,15 @@ export default function Admin() {
           />
           <p className="text-xs text-gray-400 mt-1">Max size: 10MB</p>
         </div>
+
         <button type="submit" className="w-full bg-brand-600 text-white font-bold py-3 rounded-lg hover:bg-brand-700 transition">
           Publish Material
         </button>
 
         {message && <p className="text-center font-medium mt-4">{message}</p>}
       </form>
-            {/* List of Published Posts */}
+
+      {/* List of Published Posts */}
       <div className="mt-12 pt-8 border-t border-gray-200">
         <h2 className="text-xl font-bold mb-4 text-gray-800">Published Materials</h2>
         <p className="text-sm text-gray-500 mb-4">Type your password above to enable deletion.</p>
