@@ -10,7 +10,12 @@ export default function Admin() {
      file_url: '' //
   });
   const [message, setMessage] = useState('');
-
+  const [allPosts, setAllPosts] = useState([]);
+    useEffect(() => {
+    fetch('https://sams-academy-plus.onrender.com/api/posts')
+      .then(res => res.json())
+      .then(data => setAllPosts(data));
+  }, [message]); // Refresh the list whenever a message changes (e.g., after posting/deleting)
     const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('Publishing...');
@@ -56,8 +61,25 @@ export default function Admin() {
         setMessage('❌ Could not connect to the server.');
       }
     }
-  };
+  };  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
 
+    try {
+      const response = await fetch(`https://sams-academy-plus.onrender.com/api/posts/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: formData.password }) // Uses the password you typed in the form
+      });
+
+      if (response.ok) {
+        setMessage('✅ Post deleted successfully!');
+      } else {
+        setMessage('❌ Failed to delete. Check password.');
+      }
+    } catch (err) {
+      setMessage('❌ Could not connect to server.');
+    }
+  };
   return (
     <div className="max-w-2xl mx-auto p-8 mt-10 bg-white rounded-2xl shadow-lg border border-gray-100">
       <h1 className="text-3xl font-display font-bold mb-6 text-gray-800">Teacher's Admin Panel</h1>
@@ -154,6 +176,32 @@ export default function Admin() {
 
         {message && <p className="text-center font-medium mt-4">{message}</p>}
       </form>
+            {/* List of Published Posts */}
+      <div className="mt-12 pt-8 border-t border-gray-200">
+        <h2 className="text-xl font-bold mb-4 text-gray-800">Published Materials</h2>
+        <p className="text-sm text-gray-500 mb-4">Type your password above to enable deletion.</p>
+        
+        {allPosts.length === 0 ? (
+          <p className="text-gray-400">No materials posted yet.</p>
+        ) : (
+          <div className="space-y-3">
+            {allPosts.map(post => (
+              <div key={post.id} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div>
+                  <h3 className="font-semibold text-gray-800">{post.title}</h3>
+                  <p className="text-xs text-brand-600">{post.category}</p>
+                </div>
+                <button 
+                  onClick={() => handleDelete(post.id)}
+                  className="px-4 py-2 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition font-medium text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

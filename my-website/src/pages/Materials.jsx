@@ -15,7 +15,7 @@ export default function Materials() {
     const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
  const [activeCategory, setActiveCategory] = useState(initialCategory);
-  useEffect(() => {
+    useEffect(() => {
     fetch('https://sams-academy-plus.onrender.com/api/posts')
       .then(res => res.json())
       .then(data => {
@@ -24,6 +24,7 @@ export default function Materials() {
       })
       .catch(err => {
         console.error("Error fetching posts:", err);
+        // Even if it fails, show a friendly message
         setLoading(false);
       });
   }, []);

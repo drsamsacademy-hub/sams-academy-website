@@ -53,7 +53,23 @@ app.post('/api/posts', upload.single('file'), async (req, res) => {
   
   res.json({ success: true, message: 'Post created!' });
 });
+// 3. Delete a post
+app.delete('/api/posts/:id', (req, res) => {
+  const { password } = req.body;
+  
+  if (password !== 'SamsAcademy2026!') { // Make sure this is your password!
+    return res.status(401).json({ error: 'Wrong password' });
+  }
 
+  const deleteStmt = db.prepare('DELETE FROM posts WHERE id = ?');
+  const info = deleteStmt.run(req.params.id);
+
+  if (info.changes > 0) {
+    res.json({ success: true, message: 'Post deleted!' });
+  } else {
+    res.status(404).json({ error: 'Post not found' });
+  }
+});
 app.listen(4000, () => {
   console.log('✅ Server running on http://localhost:4000');
 });
