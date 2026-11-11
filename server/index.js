@@ -6,9 +6,9 @@ import { v2 as cloudinary } from 'cloudinary';
 
 // ⚠️ YOUR CLOUDINARY KEYS HERE
 cloudinary.config({ 
-  cloud_name: 'YOUR_CLOUD_NAME', 
-  api_key: 'YOUR_API_KEY', 
-  api_secret: 'YOUR_API_SECRET' 
+  cloud_name: 'hkxr0xbl', 
+  api_key: '224682935568315', 
+  api_secret: 'k5RpP9cgGtp7Uq6w3cFrzx2etrY' 
 });
 
 const upload = multer({ storage: multer.memoryStorage() });
