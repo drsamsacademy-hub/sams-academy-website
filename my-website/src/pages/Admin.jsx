@@ -133,6 +133,7 @@ export default function Admin() {
             <option>CSIR NET</option>
             <option>Syllabus</option>
             <option>Previous Papers</option>
+            <option>Book</option>
           </select>
         </div>
 
