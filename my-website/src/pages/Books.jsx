@@ -5,18 +5,18 @@ export default function Books() {
   // You can easily change these later!
   const myBooks = [
     {
-      title: "APPSC Group 2 Comprehensive Guide",
-      isbn: "978-93-XXXX-XXX-X",
-      description: "A complete guide covering Indian History, Polity, and Economy for APPSC Group 2.",
-      buyLink: "https://amazon.in/your-book-link", // Add your link here
-      pdfLink: "#" // Add Google Drive link to your PDF here
+      title: "Endocrinology - A Student Handbook",
+      isbn: "978-93-3437-940-2",
+      description: "A comprehensive guide covering different endocrine glands for JL/DL/CSIR NET Aspirants and UG students.",
+      buyLink: "https://zenodo.org/records/21174776", // Add your link here
+      pdfLink: "https://drive.google.com/file/d/1sPOXZWwnH9NuT9mvOSS2FbtDkAtS8E5x/view?usp=sharing" // Add Google Drive link to your PDF here
     },
     {
-      title: "CSIR NET Life Sciences Manual",
-      isbn: "978-93-YYYY-YYY-Y",
-      description: "Detailed notes, previous question papers, and assessments for CSIR NET aspirants.",
-      buyLink: "https://amazon.in/your-book-link",
-      pdfLink: "#"
+      title: "Animal Embryology - Part 1 - A Student Handbook",
+      isbn: "978-93-343-7661-6",
+      description: "Detailed notes, Model questions, and assessments for JL/DL/CSIR NET aspirants and UG Students.",
+      buyLink: "https://zenodo.org/records/21185781",
+      pdfLink: "https://drive.google.com/file/d/1pSxelGm4Lc5kzh8yOLo7EvyIDWtMHFt5/view?usp=sharing"
     }
   ];
 
