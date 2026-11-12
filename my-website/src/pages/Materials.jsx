@@ -16,10 +16,12 @@ export default function Materials() {
   const [sortOrder, setSortOrder] = useState('newest'); // 'newest' or 'oldest'
 
   // Read the category from the URL on load
-  useEffect(() => {
+    useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const initialCategory = queryParams.get('cat') || 'All';
+    const initialSearch = queryParams.get('search') || '';
     setActiveCategory(initialCategory);
+    setSearchQuery(initialSearch);
   }, []);
 
   // Fetch the posts

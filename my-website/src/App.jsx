@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, Sparkles, Target, TrendingUp } from 'lucide-react';
 import Admin from './pages/Admin';
@@ -21,6 +22,15 @@ const SUBJECTS = [
 ];
 
 export default function App() {
+  const [homeSearch, setHomeSearch] = useState('');
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (homeSearch.trim()) {
+      window.location.href = `/materials?search=${encodeURIComponent(homeSearch)}`;
+    }
+  };
+
   // Check the URL to show the right page
   if (window.location.pathname === '/admin') {
     return <Admin />;
@@ -33,9 +43,11 @@ export default function App() {
   if (window.location.pathname === '/books') {
     return <Books />;
   }
+
   if (window.location.pathname === '/resources') {
     return <Resources />;
   }
+
   // Otherwise, show the Homepage
   return (
     <div className="min-h-screen">
@@ -66,6 +78,7 @@ export default function App() {
           >
             Crack <span className="gradient-text">APPSC</span> with clarity.
           </motion.h1>
+          
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
             className="mt-6 text-lg md:text-xl text-gray-600 max-w-2xl mx-auto"
@@ -73,6 +86,25 @@ export default function App() {
             Daily curated notes across core subjects — built for Gen Z aspirants
             who want smart, focused prep. 🚀
           </motion.p>
+
+          {/* Homepage Search Bar */}
+          <motion.form 
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+            onSubmit={handleSearch} 
+            className="mt-8 max-w-xl mx-auto flex items-center bg-white rounded-full shadow-lg border border-gray-100 p-2"
+          >
+            <input 
+              type="text" 
+              placeholder="Search for Day, Topic, or Keyword..." 
+              value={homeSearch}
+              onChange={(e) => setHomeSearch(e.target.value)}
+              className="flex-grow px-4 py-2 bg-transparent outline-none text-gray-700"
+            />
+            <button type="submit" className="px-6 py-2 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-700 transition">
+              Search
+            </button>
+          </motion.form>
+
           <div className="mt-8 flex gap-4 justify-center flex-wrap">
             <a href="/materials"
               className="px-8 py-3 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-700 transition shadow-lg shadow-brand-500/30">
@@ -83,6 +115,7 @@ export default function App() {
               Browse Subjects
             </a>
           </div>
+          
           <div className="mt-12 flex gap-8 justify-center text-sm text-gray-600 flex-wrap">
             <div className="flex items-center gap-2"><BookOpen size={18}/> Daily notes</div>
             <div className="flex items-center gap-2"><Target size={18}/> Multiple subjects</div>
