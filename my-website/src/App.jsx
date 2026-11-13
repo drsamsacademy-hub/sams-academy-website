@@ -51,6 +51,22 @@ export default function App() {
   // Otherwise, show the Homepage
   return (
     <div className="min-h-screen">
+            {/* Scrolling Notification Bar */}
+      <div className="bg-brand-700 text-white text-sm py-2 overflow-hidden relative z-50">
+        <marquee scrollamount="5" className="font-medium">
+          🔔 <strong>Latest Update:</strong> APPSC Group 2 Notification Released! 
+          <a href="https://psc.ap.gov.in" target="_blank" rel="noopener noreferrer" className="underline text-yellow-300 ml-2 hover:text-yellow-100">
+            Click here to apply
+          </a> 
+          &nbsp;&nbsp;|&nbsp;&nbsp; 
+          📢 UPSC Prelims 2026 dates announced. 
+          <a href="https://upsc.gov.in" target="_blank" rel="noopener noreferrer" className="underline text-yellow-300 ml-2 hover:text-yellow-100">
+            Check details
+          </a>
+          &nbsp;&nbsp;|&nbsp;&nbsp; 
+          🎓 CSIR NET Life Sciences new batch starting soon!
+        </marquee>
+      </div>
       {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
