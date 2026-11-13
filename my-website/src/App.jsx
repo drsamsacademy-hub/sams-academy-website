@@ -6,6 +6,7 @@ import Materials from './pages/Materials';
 import Books from './pages/Books';
 import Resources from './pages/Resources';
 import Jobs from './pages/Jobs';
+import Videos from './pages/Videos';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -47,6 +48,9 @@ export default function App() {
   if (window.location.pathname === '/jobs') {
     return <Jobs />;
   }
+    if (window.location.pathname === '/videos') {
+    return <Videos />;
+  }
   if (window.location.pathname === '/resources') {
     return <Resources />;
   }
@@ -84,6 +88,7 @@ export default function App() {
             <a href="/books" className="hover:text-brand-600 transition">Books</a>
             <a href="/resources" className="hover:text-brand-600 transition">Resources</a>
             <a href="/jobs" className="hover:text-brand-600 transition">Jobs</a>
+            <a href="/videos" className="hover:text-brand-600 transition">Videos</a>
           </div>
         </div>
       </nav>

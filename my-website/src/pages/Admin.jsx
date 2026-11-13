@@ -135,6 +135,7 @@ export default function Admin() {
             <option>Previous Papers</option>
             <option>Book</option>
             <option>Job Portal</option>
+            <option>Video</option>
           </select>
         </div>
 
