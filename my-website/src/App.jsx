@@ -94,8 +94,9 @@ export default function App() {
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="text-2xl font-display font-extrabold cursor-pointer">
-            <span className="gradient-text">SAMS</span>{' '}
-            <span className="text-brand-600">Academy</span>
+            <span className="text-gray-800">Dr. </span>
+<span className="gradient-text">SAMS</span>{' '}
+<span className="text-brand-600">Academy</span>
           </div>
           <div className="flex gap-6 font-medium text-gray-600">
             <a href="/" className="hover:text-brand-600 transition">Home</a>
