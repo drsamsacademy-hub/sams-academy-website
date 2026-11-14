@@ -180,9 +180,17 @@ export default function App() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="mt-16 py-8 text-center text-sm text-gray-500 border-t">
-        © {new Date().getFullYear()} SAMS Academy · Built for aspirants 💪
+            {/* Footer */}
+      <footer className="mt-16 py-10 bg-white border-t border-gray-200">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="text-sm text-gray-500 mb-4 space-y-1">
+            <p><strong>English:</strong> Prepared exclusively for educational purposes and competitive examination preparation. Information is compiled from official and reputed public sources. Readers are advised to verify important facts from official sources before relying on them.</p>
+            <p><strong>తెలుగు:</strong> ఈ మెటీరియల్ విద్యా మరియు పోటీ పరీక్షల సిద్ధత కోసం మాత్రమే రూపొందించబడింది. ముఖ్యమైన వివరాలను సంబంధిత అధికారిక వనరుల ద్వారా తప్పనిసరిగా ధృవీకరించండి.</p>
+          </div>
+          <p className="text-xs text-gray-400 pt-4 border-t border-gray-100">
+            © {new Date().getFullYear()} SAMS Academy · Built for aspirants 💪
+          </p>
+        </div>
       </footer>
     </div>
   );
