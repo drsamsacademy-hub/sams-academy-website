@@ -10,6 +10,7 @@ import Videos from './pages/Videos';
 import Contact from './pages/Contact';
 import CurrentAffairs from './pages/CurrentAffairs';
 import MockTests from './pages/MockTests';
+import Legal from './pages/Legal';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -62,6 +63,9 @@ export default function App() {
   }
     if (window.location.pathname === '/tests') {
     return <MockTests />;
+  }
+    if (window.location.pathname === '/legal') {
+    return <Legal />;
   }
   if (window.location.pathname === '/resources') {
     return <Resources />;
@@ -192,9 +196,12 @@ export default function App() {
             <p><strong>English:</strong> Prepared exclusively for educational purposes and competitive examination preparation. Information is compiled from official and reputed public sources. Readers are advised to verify important facts from official sources before relying on them.</p>
             <p><strong>తెలుగు:</strong> ఈ మెటీరియల్ విద్యా మరియు పోటీ పరీక్షల సిద్ధత కోసం మాత్రమే రూపొందించబడింది. ముఖ్యమైన వివరాలను సంబంధిత అధికారిక వనరుల ద్వారా తప్పనిసరిగా ధృవీకరించండి.</p>
           </div>
-          <p className="text-xs text-gray-400 pt-4 border-t border-gray-100">
-            © {new Date().getFullYear()} SAMS Academy · Built for aspirants 💪
-          </p>
+                    <div className="pt-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
+            <p>© {new Date().getFullYear()} SAMS Academy · Built for aspirants 💪</p>
+            <div className="flex gap-4 mt-2 md:mt-0">
+              <a href="/legal" className="hover:text-brand-600 transition">Privacy & Terms</a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
