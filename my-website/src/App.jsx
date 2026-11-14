@@ -9,6 +9,7 @@ import Jobs from './pages/Jobs';
 import Videos from './pages/Videos';
 import Contact from './pages/Contact';
 import CurrentAffairs from './pages/CurrentAffairs';
+import MockTests from './pages/MockTests';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -59,6 +60,9 @@ export default function App() {
     if (window.location.pathname === '/news') {
     return <CurrentAffairs />;
   }
+    if (window.location.pathname === '/tests') {
+    return <MockTests />;
+  }
   if (window.location.pathname === '/resources') {
     return <Resources />;
   }
@@ -99,6 +103,7 @@ export default function App() {
             <a href="/videos" className="hover:text-brand-600 transition">Videos</a>
             <a href="/contact" className="hover:text-brand-600 transition">Contact</a>
             <a href="/news" className="hover:text-brand-600 transition">News</a>
+            <a href="/tests" className="hover:text-brand-600 transition">Tests</a>
           </div>
         </div>
       </nav>
