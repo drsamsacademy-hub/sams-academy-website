@@ -191,7 +191,7 @@ const [adminSearch, setAdminSearch] = useState('');
 
       {/* List of Published Posts */}
       <div className="mt-12 pt-8 border-t border-gray-200">
-                <h2 className="text-xl font-bold mb-4 text-gray-800">Published Materials</h2>
+                        <h2 className="text-xl font-bold mb-4 text-gray-800">Published Materials</h2>
         <p className="text-sm text-gray-500 mb-4">Type your password above to enable deletion.</p>
         
         {/* Admin Search & Filter */}
@@ -256,5 +256,6 @@ const [adminSearch, setAdminSearch] = useState('');
           </div>
         )}
       </div>
+    </div>
   );
 }
