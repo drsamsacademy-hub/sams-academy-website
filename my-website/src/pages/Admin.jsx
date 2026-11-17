@@ -11,7 +11,13 @@ export default function Admin() {
   });
   const [message, setMessage] = useState('');
   const [allPosts, setAllPosts] = useState([]);
-
+const [adminSearch, setAdminSearch] = useState('');
+  const [adminCategory, setAdminCategory] = useState('All');
+  const filteredAdminPosts = allPosts.filter(post => {
+    const matchesSearch = post.title.toLowerCase().includes(adminSearch.toLowerCase());
+    const matchesCategory = adminCategory === 'All' || post.category === adminCategory;
+    return matchesSearch && matchesCategory;
+  });
   // Fetch posts on load (and refresh whenever the message changes)
   useEffect(() => {
     fetch('https://sams-academy-plus.onrender.com/api/posts')
@@ -185,30 +191,70 @@ export default function Admin() {
 
       {/* List of Published Posts */}
       <div className="mt-12 pt-8 border-t border-gray-200">
-        <h2 className="text-xl font-bold mb-4 text-gray-800">Published Materials</h2>
+                <h2 className="text-xl font-bold mb-4 text-gray-800">Published Materials</h2>
         <p className="text-sm text-gray-500 mb-4">Type your password above to enable deletion.</p>
         
-        {allPosts.length === 0 ? (
-          <p className="text-gray-400">No materials posted yet.</p>
+        {/* Admin Search & Filter */}
+        <div className="flex flex-col md:flex-row gap-3 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+          <input 
+            type="text" 
+            placeholder="Search by title..." 
+            value={adminSearch}
+            onChange={(e) => setAdminSearch(e.target.value)}
+            className="flex-grow p-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-sm"
+          />
+          <select 
+            value={adminCategory}
+            onChange={(e) => setAdminCategory(e.target.value)}
+            className="p-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-sm bg-white"
+          >
+            <option value="All">All Categories</option>
+            <option>Indian History</option>
+            <option>AP History</option>
+            <option>Geography</option>
+            <option>Constitution of India</option>
+            <option>Economy</option>
+            <option>Society</option>
+            <option>Current Affairs</option>
+            <option>Mental Ability</option>
+            <option>Assessments</option>
+            <option>APPGCET Zoology</option>
+            <option>Life Sciences</option>
+            <option>CSIR NET</option>
+            <option>Syllabus</option>
+            <option>Previous Papers</option>
+            <option>Book</option>
+            <option>Job Portal</option>
+            <option>Video</option>
+            <option>Mock Test</option>
+          </select>
+        </div>
+
+        {/* Grid Layout for Posts */}
+        {filteredAdminPosts.length === 0 ? (
+          <p className="text-gray-400 text-center py-8">No materials found matching your search.</p>
         ) : (
-          <div className="space-y-3">
-            {allPosts.map(post => (
-              <div key={post.id} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredAdminPosts.map(post => (
+              <div key={post.id} className="flex flex-col justify-between p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
                 <div>
-                  <h3 className="font-semibold text-gray-800">{post.title}</h3>
-                  <p className="text-xs text-brand-600">{post.category}</p>
+                  <span className="inline-block text-[10px] font-bold text-brand-600 bg-brand-50 px-2 py-1 rounded-md mb-2 uppercase tracking-wide">
+                    {post.category}
+                  </span>
+                  <h3 className="font-semibold text-gray-800 text-sm leading-tight mb-2 line-clamp-3">{post.title}</h3>
                 </div>
-                <button 
-                  onClick={() => handleDelete(post.id)}
-                  className="px-4 py-2 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition font-medium text-sm"
-                >
-                  Delete
-                </button>
+                <div className="flex justify-end mt-4 pt-3 border-t border-gray-100">
+                  <button 
+                    onClick={() => handleDelete(post.id)}
+                    className="px-3 py-1.5 bg-red-50 text-red-600 rounded-md hover:bg-red-100 transition font-medium text-xs"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         )}
       </div>
-    </div>
   );
 }
