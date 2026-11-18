@@ -4,8 +4,7 @@ import { ArrowLeft, Link as LinkIcon, Download, Search } from 'lucide-react';
 const CATEGORIES = [
   'All', 'Indian History', 'AP History', 'Geography', 
   'Constitution of India', 'Economy', 'Society', 
-  'Current Affairs', 'Mental Ability',
-  'Assessments', 'APPGCET Zoology', 'Life Sciences', 'CSIR NET'
+  'Mental Ability', 'Assessments', 'APPGCET Zoology', 'Life Sciences', 'CSIR NET'
 ];
 
 export default function Materials() {
@@ -39,9 +38,12 @@ export default function Materials() {
   }, []);
 
   // Filter and Sort the posts
-  const filteredPosts = posts
+    const filteredPosts = posts
     .filter(post => {
-      // 1. Filter by Category
+      // 1. Hide Current Affairs from this page (they have their own News page)
+      if (post.category === 'Current Affairs') return false;
+
+      // 2. Filter by Category
       const matchesCategory = activeCategory === 'All' || post.category === activeCategory;
       
       // 2. Filter by Search Text (Title or Content)
