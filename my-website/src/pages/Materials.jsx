@@ -112,9 +112,9 @@ export default function Materials() {
       ) : filteredPosts.length === 0 ? (
         <p className="text-gray-500">No materials found matching your search.</p>
       ) : (
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredPosts.map(post => (
-            <div key={post.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div key={post.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
               <span className="text-xs font-bold text-brand-600 uppercase tracking-wider">{post.category}</span>
               <h2 className="text-2xl font-bold text-gray-800 mt-1 mb-3">{post.title}</h2>
               
