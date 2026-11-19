@@ -14,7 +14,7 @@ const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
-      <h2 className="text-lg font-bold text-gray-800 mb-4">{index + 1}. {questionText}</h2>
+            <h2 className="text-lg font-bold text-gray-800 mb-4">{questionText}</h2>
 
       <div className="space-y-3">
         {options.map((opt, i) => {
