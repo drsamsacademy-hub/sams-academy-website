@@ -75,17 +75,23 @@ export default function MockTests() {
       });
   }, []);
 
-  // Function to parse the raw text into separate questions
+    // Function to parse the raw text into separate questions
   const parseQuestions = (content) => {
-    // Split by question marks or lines that start with a number
-    const rawBlocks = content.split(/(?=\n?\d+\.|\n?Q\d+)/).filter(b => b.trim() !== '');
+    // Split the text whenever we see a number followed by a dot and a space (e.g., "1. ")
+    // Or a number followed by a bracket (e.g., "1) ")
+    const rawBlocks = content.split(/(?=\n\s*\d+[\.\)]\s)/).filter(block => block.trim() !== '');
     
+    // If the split didn't find any numbers, just treat the whole text as one block
+    if (rawBlocks.length === 0) {
+      return [{ lines: content.split('\n').filter(line => line.trim() !== '') }];
+    }
+
     return rawBlocks.map(block => {
-      const lines = block.split('\n').filter(line => line.trim() !== '');
+      // Clean up the lines and remove empty ones
+      const lines = block.split('\n').map(line => line.trim()).filter(line => line !== '');
       return { lines };
     });
   };
-
   // Function to calculate score
   const calculateScore = () => {
     let score = 0;
