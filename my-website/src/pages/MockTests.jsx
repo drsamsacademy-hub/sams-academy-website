@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle } from 'lucide-react';
 
-// --- SUB-COMPONENT FOR A SINGLE QUESTION ---
 const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
-  const questionText = q.options.length > 0 ? q.lines[0] : q.lines[0];
+  // The question text is everything except the last line
+  const questionText = q.lines[0];
   
-  // Extract the correct answer (last line)
+  // Extract the correct answer from the last line
   const answerLine = q.lines[q.lines.length - 1];
-  const correctAnswer = answerLine.replace('Answer:', '').trim().toUpperCase();
+  const correctAnswer = answerLine.replace(/Answer:/i, '').trim().toUpperCase();
 
-  // Extract the options
-  const options = q.lines.filter(line => /^[A-D]\)/.test(line.trim().toUpperCase()));
+  // Options are lines starting with A, B, C, or D
+  const options = q.lines.filter(line => /^[A-D][\.\)]/.test(line.trim().toUpperCase()));
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
@@ -19,7 +19,7 @@ const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
       <div className="space-y-3">
         {options.map((opt, i) => {
           const letter = opt.trim().charAt(0).toUpperCase();
-          const text = opt.replace(/^[A-D]\)/, '').trim();
+          const text = opt.replace(/^[A-D][\.\)]/, '').trim();
           const isSelected = answers[index] === letter;
           const isCorrect = letter === correctAnswer;
           
@@ -51,13 +51,10 @@ const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
   );
 };
 
-// --- MAIN COMPONENT ---
 export default function MockTests() {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTest, setActiveTest] = useState(null);
-  
-  // State to track user's answers and submission status
   const [answers, setAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
 
@@ -75,31 +72,25 @@ export default function MockTests() {
       });
   }, []);
 
-    // Function to parse the raw text into separate questions
+  // A simpler, foolproof way to split the text into questions
   const parseQuestions = (content) => {
-    // Split the text whenever we see a number followed by a dot and a space (e.g., "1. ")
-    // Or a number followed by a bracket (e.g., "1) ")
-    const rawBlocks = content.split(/(?=\n\s*\d+[\.\)]\s)/).filter(block => block.trim() !== '');
+    // This finds any line that starts with a number and a dot (e.g., "1. ")
+    // and splits the text there.
+    const parts = content.split(/\n(?=\d+\.)/);
     
-    // If the split didn't find any numbers, just treat the whole text as one block
-    if (rawBlocks.length === 0) {
-      return [{ lines: content.split('\n').filter(line => line.trim() !== '') }];
-    }
-
-    return rawBlocks.map(block => {
-      // Clean up the lines and remove empty ones
-      const lines = block.split('\n').map(line => line.trim()).filter(line => line !== '');
+    return parts.map(part => {
+      const lines = part.split('\n').map(line => line.trim()).filter(line => line !== '');
       return { lines };
-    });
+    }).filter(q => q.lines.length > 1); // Ignore empty blocks
   };
-  // Function to calculate score
+
   const calculateScore = () => {
     let score = 0;
     const qs = parseQuestions(activeTest.content);
     
     qs.forEach((q, index) => {
       const answerLine = q.lines[q.lines.length - 1];
-      const correct = answerLine.replace('Answer:', '').trim().toUpperCase();
+      const correct = answerLine.replace(/Answer:/i, '').trim().toUpperCase();
       if (answers[index] === correct) score++;
     });
     
@@ -112,7 +103,6 @@ export default function MockTests() {
         <ArrowLeft size={18} className="mr-2" /> Back to Home
       </a>
 
-      {/* HEADER */}
       <div className="flex items-center gap-3 mb-6">
         <CheckCircle className="text-brand-600" size={32} />
         <h1 className="text-4xl font-display font-bold text-gray-900">Interactive Mock Tests</h1>
@@ -124,7 +114,6 @@ export default function MockTests() {
         <p className="text-gray-500">No mock tests uploaded yet. Check back soon!</p>
       ) : (
         <div>
-          {/* LIST OF AVAILABLE TESTS */}
           {!activeTest ? (
             <div className="grid md:grid-cols-2 gap-5">
               {tests.map(test => (
@@ -143,7 +132,6 @@ export default function MockTests() {
               ))}
             </div>
           ) : (
-            /* ACTIVE TEST VIEW */
             <div>
               <div className="flex justify-between items-center mb-6 bg-brand-50 p-4 rounded-xl border border-brand-100">
                 <h2 className="text-2xl font-bold text-brand-800">{activeTest.title}</h2>
@@ -152,7 +140,6 @@ export default function MockTests() {
                 </button>
               </div>
 
-              {/* RENDER QUESTIONS */}
               {parseQuestions(activeTest.content).map((q, index) => (
                 <QuestionBlock 
                   key={index} 
@@ -164,7 +151,6 @@ export default function MockTests() {
                 />
               ))}
 
-              {/* SUBMIT BUTTON & SCORE */}
               <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 sticky bottom-4">
                 {!showResults ? (
                   <button 
