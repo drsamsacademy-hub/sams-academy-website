@@ -38,8 +38,8 @@ export default function App() {
     }
   };
 
-  // Check the URL to show the right page
-    if (window.location.pathname === '/admin') {
+  // 1. Admin Route
+  if (window.location.pathname === '/admin') {
     return (
       <Show when="signed-in" fallback={
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -57,7 +57,8 @@ export default function App() {
     );
   }
 
-      if (window.location.pathname === '/materials') {
+  // 2. Materials Route
+  if (window.location.pathname === '/materials') {
     return (
       <Show when="signed-in" fallback={
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -75,13 +76,8 @@ export default function App() {
     );
   }
 
-  if (window.location.pathname === '/books') {
-    return <Books />;
-  }
-  if (window.location.pathname === '/jobs') {
-    return <Jobs />;
-  }
-        if (window.location.pathname === '/videos') {
+  // 3. Videos Route
+  if (window.location.pathname === '/videos') {
     return (
       <Show when="signed-in" fallback={
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -99,6 +95,7 @@ export default function App() {
     );
   }
 
+  // 4. Tests Route
   if (window.location.pathname === '/tests') {
     return (
       <Show when="signed-in" fallback={
@@ -117,51 +114,34 @@ export default function App() {
     );
   }
 
-  if (window.location.pathname === '/admin') {
-    return (
-      <Show when="signed-in" fallback={
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">Admin Access Only</h1>
-          <p className="text-gray-600 mb-6">Please log in to access the admin panel.</p>
-          <SignInButton mode="modal">
-            <button className="px-6 py-3 bg-brand-600 text-white rounded-lg font-bold hover:bg-brand-700 transition">
-              Login
-            </button>
-          </SignInButton>
-        </div>
-      }>
-        <Admin />
-      </Show>
-    );
+  // 5. Books Route
+  if (window.location.pathname === '/books') {
+    return <Books />;
   }
-    if (window.location.pathname === '/contact') {
-    return <Contact />;
-  }
-    if (window.location.pathname === '/news') {
-    return <CurrentAffairs />;
-  }
-       if (window.location.pathname === '/tests') {
-    return (
-      <Show when="signed-in" fallback={
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">Login Required</h1>
-          <p className="text-gray-600 mb-6">Please log in to take the mock tests.</p>
-          <SignInButton mode="modal">
-            <button className="px-6 py-3 bg-brand-600 text-white rounded-lg font-bold hover:bg-brand-700 transition">
-              Student Login
-            </button>
-          </SignInButton>
-        </div>
-      }>
-        <MockTests />
-      </Show>
-    );
-  }
-    if (window.location.pathname === '/legal') {
-    return <Legal />;
-  }
+
+  // 6. Resources Route
   if (window.location.pathname === '/resources') {
     return <Resources />;
+  }
+
+  // 7. Jobs Route
+  if (window.location.pathname === '/jobs') {
+    return <Jobs />;
+  }
+
+  // 8. Contact Route
+  if (window.location.pathname === '/contact') {
+    return <Contact />;
+  }
+
+  // 9. News Route
+  if (window.location.pathname === '/news') {
+    return <CurrentAffairs />;
+  }
+
+  // 10. Legal Route
+  if (window.location.pathname === '/legal') {
+    return <Legal />;
   }
 
   // Otherwise, show the Homepage
