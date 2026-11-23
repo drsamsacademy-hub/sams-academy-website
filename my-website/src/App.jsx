@@ -11,7 +11,7 @@ import Contact from './pages/Contact';
 import CurrentAffairs from './pages/CurrentAffairs';
 import MockTests from './pages/MockTests';
 import Legal from './pages/Legal';
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/react";
+import { Show, SignInButton, UserButton } from "@clerk/react";
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -120,14 +120,17 @@ export default function App() {
           <div className="flex items-center gap-3">
             <SignedOut>
               <SignInButton mode="modal">
+                          <div className="flex items-center gap-3">
+            <Show when="signed-out">
+              <SignInButton mode="modal">
                 <button className="px-4 py-2 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition text-sm">
                   Student Login
                 </button>
               </SignInButton>
-            </SignedOut>
-            <SignedIn>
-             <UserButton />
-            </SignedIn>
+            </Show>
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
           </div>
 
         </div>
