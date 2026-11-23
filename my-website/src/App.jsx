@@ -117,10 +117,7 @@ export default function App() {
           </div>
 
           {/* Login / Profile Button */}
-          <div className="flex items-center gap-3">
-            <SignedOut>
-              <SignInButton mode="modal">
-                          <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3">
             <Show when="signed-out">
               <SignInButton mode="modal">
                 <button className="px-4 py-2 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition text-sm">
