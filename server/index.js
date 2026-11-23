@@ -96,6 +96,15 @@ app.post('/api/results', async (req, res) => {
     res.status(500).json({ error: 'Failed to save score' });
   }
 });
+// 5. Get test results
+app.get('/api/results', async (req, res) => {
+  try {
+    const result = await db.execute('SELECT * FROM results ORDER BY created_at DESC');
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 app.listen(4000, () => {
   console.log('✅ Server running on http://localhost:4000');
 });
