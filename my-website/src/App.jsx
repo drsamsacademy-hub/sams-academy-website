@@ -12,6 +12,7 @@ import CurrentAffairs from './pages/CurrentAffairs';
 import MockTests from './pages/MockTests';
 import Legal from './pages/Legal';
 import { Show, SignInButton, UserButton } from "@clerk/react";
+import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -29,6 +30,7 @@ const SUBJECTS = [
 ];
 
 export default function App() {
+    const { user } = useUser();
   const [homeSearch, setHomeSearch] = useState('');
 
   const handleSearch = (e) => {
@@ -39,7 +41,7 @@ export default function App() {
   };
 
   // 1. Admin Route
-  if (window.location.pathname === '/admin') {
+    if (window.location.pathname === '/admin') {
     return (
       <Show when="signed-in" fallback={
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -52,7 +54,18 @@ export default function App() {
           </SignInButton>
         </div>
       }>
-        <Admin />
+        {/* Check if the logged-in user is YOU */}
+        {user?.primaryEmailAddress?.emailAddress === 'drsamsacademy@gmail.com' ? (
+          <Admin />
+        ) : (
+          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+            <h1 className="text-3xl font-bold text-red-600 mb-4">Access Denied</h1>
+            <p className="text-gray-600">You do not have permission to view this page.</p>
+            <a href="/" className="mt-6 px-6 py-2 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition">
+              Return to Home
+            </a>
+          </div>
+        )}
       </Show>
     );
   }
