@@ -81,7 +81,21 @@ app.delete('/api/posts/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// 4. Save a test result
+app.post('/api/results', async (req, res) => {
+  const { email, name, testTitle, score, total } = req.body;
 
+  try {
+    await db.execute({
+      sql: 'INSERT INTO results (student_email, student_name, test_title, score, total_questions) VALUES (?, ?, ?, ?, ?)',
+      args: [email, name, testTitle, score, total]
+    });
+    res.json({ success: true, message: 'Score saved!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to save score' });
+  }
+});
 app.listen(4000, () => {
   console.log('✅ Server running on http://localhost:4000');
 });

@@ -18,5 +18,16 @@ await db.execute(`
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
   );
 `);
-
+// Create Results Table
+await db.execute(`
+  CREATE TABLE IF NOT EXISTS results (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_email TEXT NOT NULL,
+    student_name TEXT,
+    test_title TEXT NOT NULL,
+    score INTEGER NOT NULL,
+    total_questions INTEGER NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+  );
+`);
 export default db;

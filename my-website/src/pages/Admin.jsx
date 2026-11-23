@@ -16,6 +16,7 @@ const [adminSearch, setAdminSearch] = useState('');
   const filteredAdminPosts = allPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(adminSearch.toLowerCase());
     const matchesCategory = adminCategory === 'All' || post.category === adminCategory;
+      const [allResults, setAllResults] = useState([]);
     return matchesSearch && matchesCategory;
   });
   // Fetch posts on load (and refresh whenever the message changes)
@@ -25,7 +26,11 @@ const [adminSearch, setAdminSearch] = useState('');
       .then(data => setAllPosts(data))
       .catch(err => console.error(err));
   }, [message]);
-
+  useEffect(() => {
+    fetch('https://sams-academy-plus.onrender.com/api/results')
+      .then(res => res.json())
+      .then(data => setAllResults(data));
+  }, [message]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('Publishing...');
@@ -253,6 +258,41 @@ const [adminSearch, setAdminSearch] = useState('');
                 </div>
               </div>
             ))}
+          </div>
+        )}
+      </div>
+          {/* Student Results Section */}
+      <div className="mt-12 pt-8 border-t border-gray-200">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Student Mock Test Results</h2>
+        <p className="text-sm text-gray-500 mb-4">Here are the recent scores submitted by logged-in students.</p>
+        
+        {allResults.length === 0 ? (
+          <p className="text-gray-400">No test results yet.</p>
+        ) : (
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-gray-50 border-b border-gray-200 text-gray-600">
+                <tr>
+                  <th className="p-4 font-semibold">Student</th>
+                  <th className="p-4 font-semibold">Test</th>
+                  <th className="p-4 font-semibold">Score</th>
+                  <th className="p-4 font-semibold">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {allResults.map(result => (
+                  <tr key={result.id} className="hover:bg-gray-50">
+                    <td className="p-4">
+                      <div className="font-medium text-gray-800">{result.student_name || 'Student'}</div>
+                      <div className="text-xs text-gray-500">{result.student_email}</div>
+                    </td>
+                    <td className="p-4 text-gray-800">{result.test_title}</td>
+                    <td className="p-4 font-bold text-brand-600">{result.score} / {result.total_questions}</td>
+                    <td className="p-4 text-gray-500">{new Date(result.created_at).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
