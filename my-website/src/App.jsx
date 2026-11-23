@@ -11,6 +11,7 @@ import Contact from './pages/Contact';
 import CurrentAffairs from './pages/CurrentAffairs';
 import MockTests from './pages/MockTests';
 import Legal from './pages/Legal';
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/react";
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -90,15 +91,19 @@ export default function App() {
           🎓 CSIR NET Life Sciences new batch starting soon!
         </marquee>
       </div>
-      {/* Navbar */}
+           {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          
+          {/* Logo */}
           <div className="text-2xl font-display font-extrabold cursor-pointer">
             <span className="text-gray-800">Dr. </span>
-<span className="gradient-text">SAMS</span>{' '}
-<span className="text-brand-600">Academy</span>
+            <span className="gradient-text">SAMS</span>{' '}
+            <span className="text-brand-600">Academy</span>
           </div>
-          <div className="flex gap-6 font-medium text-gray-600">
+
+          {/* Navigation Links */}
+          <div className="flex gap-4 font-medium text-gray-600 text-sm">
             <a href="/" className="hover:text-brand-600 transition">Home</a>
             <a href="/admin" className="hover:text-brand-600 transition">Admin</a>
             <a href="/materials" className="hover:text-brand-600 transition">Materials</a>
@@ -110,6 +115,21 @@ export default function App() {
             <a href="/news" className="hover:text-brand-600 transition">News</a>
             <a href="/tests" className="hover:text-brand-600 transition">Tests</a>
           </div>
+
+          {/* Login / Profile Button */}
+          <div className="flex items-center gap-3">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="px-4 py-2 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition text-sm">
+                  Student Login
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+             <UserButton />
+            </SignedIn>
+          </div>
+
         </div>
       </nav>
 
