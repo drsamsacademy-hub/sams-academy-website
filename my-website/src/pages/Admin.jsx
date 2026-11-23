@@ -11,13 +11,13 @@ export default function Admin() {
   });
   const [message, setMessage] = useState('');
   const [allPosts, setAllPosts] = useState([]);
+  const [allResults, setAllResults] = useState([]);
 const [adminSearch, setAdminSearch] = useState('');
   const [adminCategory, setAdminCategory] = useState('All');
   const filteredAdminPosts = allPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(adminSearch.toLowerCase());
     const matchesCategory = adminCategory === 'All' || post.category === adminCategory;
-      const [allResults, setAllResults] = useState([]);
-    return matchesSearch && matchesCategory;
+          return matchesSearch && matchesCategory;
   });
   // Fetch posts on load (and refresh whenever the message changes)
   useEffect(() => {
@@ -26,11 +26,12 @@ const [adminSearch, setAdminSearch] = useState('');
       .then(data => setAllPosts(data))
       .catch(err => console.error(err));
   }, [message]);
-  useEffect(() => {
+    useEffect(() => {
     fetch('https://sams-academy-plus.onrender.com/api/results')
       .then(res => res.json())
-      .then(data => setAllResults(data));
-  }, [message]);
+      .then(data => setAllResults(data))
+      .catch(err => console.error(err));
+  }, [message]); // Refreshes when a message changes
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('Publishing...');
