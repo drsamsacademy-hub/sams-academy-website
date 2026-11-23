@@ -57,7 +57,7 @@ export default function App() {
     );
   }
 
-    if (window.location.pathname === '/materials') {
+      if (window.location.pathname === '/materials') {
     return (
       <Show when="signed-in" fallback={
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -81,7 +81,7 @@ export default function App() {
   if (window.location.pathname === '/jobs') {
     return <Jobs />;
   }
-      if (window.location.pathname === '/videos') {
+        if (window.location.pathname === '/videos') {
     return (
       <Show when="signed-in" fallback={
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -98,13 +98,49 @@ export default function App() {
       </Show>
     );
   }
+
+  if (window.location.pathname === '/tests') {
+    return (
+      <Show when="signed-in" fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Login Required</h1>
+          <p className="text-gray-600 mb-6">Please log in to take the mock tests.</p>
+          <SignInButton mode="modal">
+            <button className="px-6 py-3 bg-brand-600 text-white rounded-lg font-bold hover:bg-brand-700 transition">
+              Student Login
+            </button>
+          </SignInButton>
+        </div>
+      }>
+        <MockTests />
+      </Show>
+    );
+  }
+
+  if (window.location.pathname === '/admin') {
+    return (
+      <Show when="signed-in" fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Admin Access Only</h1>
+          <p className="text-gray-600 mb-6">Please log in to access the admin panel.</p>
+          <SignInButton mode="modal">
+            <button className="px-6 py-3 bg-brand-600 text-white rounded-lg font-bold hover:bg-brand-700 transition">
+              Login
+            </button>
+          </SignInButton>
+        </div>
+      }>
+        <Admin />
+      </Show>
+    );
+  }
     if (window.location.pathname === '/contact') {
     return <Contact />;
   }
     if (window.location.pathname === '/news') {
     return <CurrentAffairs />;
   }
-      if (window.location.pathname === '/tests') {
+       if (window.location.pathname === '/tests') {
     return (
       <Show when="signed-in" fallback={
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
