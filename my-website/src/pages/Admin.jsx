@@ -12,26 +12,23 @@ export default function Admin() {
   const [message, setMessage] = useState('');
   const [allPosts, setAllPosts] = useState([]);
   const [allResults, setAllResults] = useState([]);
-const [adminSearch, setAdminSearch] = useState('');
+  
+  const [adminSearch, setAdminSearch] = useState('');
   const [adminCategory, setAdminCategory] = useState('All');
-  const filteredAdminPosts = allPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(adminSearch.toLowerCase());
-    const matchesCategory = adminCategory === 'All' || post.category === adminCategory;
-          return matchesSearch && matchesCategory;
-  });
-  // Fetch posts on load (and refresh whenever the message changes)
+
+  // Fetch posts and results
   useEffect(() => {
     fetch('https://sams-academy-plus.onrender.com/api/posts')
       .then(res => res.json())
       .then(data => setAllPosts(data))
       .catch(err => console.error(err));
-  }, [message]);
-    useEffect(() => {
+
     fetch('https://sams-academy-plus.onrender.com/api/results')
       .then(res => res.json())
       .then(data => setAllResults(data))
       .catch(err => console.error(err));
-  }, [message]); // Refreshes when a message changes
+  }, [message]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('Publishing...');
@@ -92,151 +89,71 @@ const [adminSearch, setAdminSearch] = useState('');
     }
   };
 
+  const filteredAdminPosts = allPosts.filter(post => {
+    const matchesSearch = post.title.toLowerCase().includes(adminSearch.toLowerCase());
+    const matchesCategory = adminCategory === 'All' || post.category === adminCategory;
+    return matchesSearch && matchesCategory;
+  });
+
   return (
-    <div className="max-w-2xl mx-auto p-8 mt-10 bg-white rounded-2xl shadow-lg border border-gray-100 mb-20">
-      <h1 className="text-3xl font-display font-bold mb-6 text-gray-800">Teacher's Admin Panel</h1>
-      <p className="text-gray-500 mb-6">Paste your Daily Material here to publish it to the website.</p>
+    <div className="max-w-5xl mx-auto p-6 mt-10 mb-20">
+      <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 mb-10">
+        <h1 className="text-3xl font-display font-bold mb-6 text-gray-800">Teacher's Admin Panel</h1>
+        <p className="text-gray-500 mb-6">Paste your Daily Material here to publish it to the website.</p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Admin Password</label>
+              <input type="password" required value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Enter password" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Title</label>
+              <input type="text" required value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="e.g., Day 1 - Constitution" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Subject Category</label>
+            <select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
+              <option>Indian History</option><option>AP History</option><option>Geography</option><option>Constitution of India</option><option>Economy</option><option>Society</option><option>Current Affairs</option><option>Mental Ability</option><option>Assessments</option><option>APPGCET Zoology</option><option>Life Sciences</option><option>CSIR NET</option><option>Syllabus</option><option>Previous Papers</option><option>Book</option><option>Job Portal</option><option>Video</option><option>Mock Test</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Content (Paste from Word)</label>
+            <textarea required rows="4" value={formData.content} onChange={(e) => setFormData({...formData, content: e.target.value})} className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none font-mono text-sm" placeholder="Paste your notes here..." />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Link (Optional)</label>
+              <input type="url" value={formData.link_url} onChange={(e) => setFormData({...formData, link_url: e.target.value})} className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="https://..." />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Upload File (Optional)</label>
+              <input type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" onChange={(e) => setFormData({...formData, file_url: e.target.files[0]})} className="mt-1 w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none bg-gray-50 text-sm" />
+            </div>
+          </div>
+
+          <button type="submit" className="w-full bg-brand-600 text-white font-bold py-3 rounded-lg hover:bg-brand-700 transition">
+            Publish Material
+          </button>
+          {message && <p className="text-center font-medium mt-4">{message}</p>}
+        </form>
+      </div>
+
+      <div>
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Published Materials</h2>
         
-        {/* Password */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Admin Password</label>
-          <input 
-            type="password" required
-            value={formData.password}
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
-            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
-            placeholder="Enter password"
-          />
-        </div>
-
-        {/* Title */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Title</label>
-          <input 
-            type="text" required
-            value={formData.title}
-            onChange={(e) => setFormData({...formData, title: e.target.value})}
-            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
-            placeholder="e.g., Day 1 - Constitution Preamble"
-          />
-        </div>
-
-        {/* Category */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Subject Category</label>
-          <select 
-            value={formData.category}
-            onChange={(e) => setFormData({...formData, category: e.target.value})}
-            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
-          >
-            <option>Indian History</option>
-            <option>AP History</option>
-            <option>Geography</option>
-            <option>Constitution of India</option>
-            <option>Economy</option>
-            <option>Society</option>
-            <option>Current Affairs</option>
-            <option>Mental Ability</option>
-            <option>Assessments</option>
-            <option>APPGCET Zoology</option>
-            <option>Life Sciences</option>
-            <option>CSIR NET</option>
-            <option>Syllabus</option>
-            <option>Previous Papers</option>
-            <option>Book</option>
-            <option>Job Portal</option>
-            <option>Video</option>
-            <option>Mock Test</option>
-          </select>
-        </div>
-
-        {/* Content */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Content (Paste from Word)</label>
-          <textarea 
-            required rows="6"
-            value={formData.content}
-            onChange={(e) => setFormData({...formData, content: e.target.value})}
-            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none font-mono text-sm"
-            placeholder="Paste your notes here..."
-          />
-        </div>
-
-        {/* Link Input */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Link (YouTube / Google Form)</label>
-          <input 
-            type="url"
-            value={formData.link_url}
-            onChange={(e) => setFormData({...formData, link_url: e.target.value})}
-            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
-            placeholder="https://..."
-          />
-        </div>
-
-        {/* File Upload Input */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Upload PDF / Word / Image (Optional)</label>
-          <input 
-            type="file"
-            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-            onChange={(e) => setFormData({...formData, file_url: e.target.files[0]})}
-            className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none bg-gray-50"
-          />
-          <p className="text-xs text-gray-400 mt-1">Max size: 10MB</p>
-        </div>
-
-        <button type="submit" className="w-full bg-brand-600 text-white font-bold py-3 rounded-lg hover:bg-brand-700 transition">
-          Publish Material
-        </button>
-
-        {message && <p className="text-center font-medium mt-4">{message}</p>}
-      </form>
-
-      {/* List of Published Posts */}
-      <div className="mt-12 pt-8 border-t border-gray-200">
-                        <h2 className="text-xl font-bold mb-4 text-gray-800">Published Materials</h2>
-        <p className="text-sm text-gray-500 mb-4">Type your password above to enable deletion.</p>
-        
-        {/* Admin Search & Filter */}
         <div className="flex flex-col md:flex-row gap-3 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
-          <input 
-            type="text" 
-            placeholder="Search by title..." 
-            value={adminSearch}
-            onChange={(e) => setAdminSearch(e.target.value)}
-            className="flex-grow p-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-sm"
-          />
-          <select 
-            value={adminCategory}
-            onChange={(e) => setAdminCategory(e.target.value)}
-            className="p-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-sm bg-white"
-          >
+          <input type="text" placeholder="Search by title..." value={adminSearch} onChange={(e) => setAdminSearch(e.target.value)} className="flex-grow p-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-sm" />
+          <select value={adminCategory} onChange={(e) => setAdminCategory(e.target.value)} className="p-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-sm bg-white">
             <option value="All">All Categories</option>
-            <option>Indian History</option>
-            <option>AP History</option>
-            <option>Geography</option>
-            <option>Constitution of India</option>
-            <option>Economy</option>
-            <option>Society</option>
-            <option>Current Affairs</option>
-            <option>Mental Ability</option>
-            <option>Assessments</option>
-            <option>APPGCET Zoology</option>
-            <option>Life Sciences</option>
-            <option>CSIR NET</option>
-            <option>Syllabus</option>
-            <option>Previous Papers</option>
-            <option>Book</option>
-            <option>Job Portal</option>
-            <option>Video</option>
-            <option>Mock Test</option>
+            <option>Indian History</option><option>AP History</option><option>Geography</option><option>Constitution of India</option><option>Economy</option><option>Society</option><option>Current Affairs</option><option>Mental Ability</option><option>Assessments</option><option>APPGCET Zoology</option><option>Life Sciences</option><option>CSIR NET</option><option>Syllabus</option><option>Previous Papers</option><option>Book</option><option>Job Portal</option><option>Video</option><option>Mock Test</option>
           </select>
         </div>
 
-        {/* Grid Layout for Posts */}
         {filteredAdminPosts.length === 0 ? (
           <p className="text-gray-400 text-center py-8">No materials found matching your search.</p>
         ) : (
@@ -250,10 +167,7 @@ const [adminSearch, setAdminSearch] = useState('');
                   <h3 className="font-semibold text-gray-800 text-sm leading-tight mb-2 line-clamp-3">{post.title}</h3>
                 </div>
                 <div className="flex justify-end mt-4 pt-3 border-t border-gray-100">
-                  <button 
-                    onClick={() => handleDelete(post.id)}
-                    className="px-3 py-1.5 bg-red-50 text-red-600 rounded-md hover:bg-red-100 transition font-medium text-xs"
-                  >
+                  <button onClick={() => handleDelete(post.id)} className="px-3 py-1.5 bg-red-50 text-red-600 rounded-md hover:bg-red-100 transition font-medium text-xs">
                     Delete
                   </button>
                 </div>
@@ -262,20 +176,21 @@ const [adminSearch, setAdminSearch] = useState('');
           </div>
         )}
       </div>
-          {/* Student Results Section */}
-      <div className="mt-12 pt-8 border-t border-gray-200">
+
+      {/* Student Results Section */}
+      <div className="mt-12 pt-8 border-t-2 border-gray-200">
         <h2 className="text-2xl font-bold mb-4 text-gray-800">Student Mock Test Results</h2>
         <p className="text-sm text-gray-500 mb-4">Here are the recent scores submitted by logged-in students.</p>
         
         {allResults.length === 0 ? (
-          <p className="text-gray-400">No test results yet.</p>
+          <p className="text-gray-400 bg-gray-50 p-6 rounded-xl text-center">No test results yet.</p>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
             <table className="w-full text-left text-sm">
               <thead className="bg-gray-50 border-b border-gray-200 text-gray-600">
                 <tr>
                   <th className="p-4 font-semibold">Student</th>
-                  <th className="p-4 font-semibold">Test</th>
+                  <th className="p-4 font-semibold">Test Name</th>
                   <th className="p-4 font-semibold">Score</th>
                   <th className="p-4 font-semibold">Date</th>
                 </tr>
