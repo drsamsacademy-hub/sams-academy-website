@@ -11,7 +11,6 @@ import Contact from './pages/Contact';
 import CurrentAffairs from './pages/CurrentAffairs';
 import MockTests from './pages/MockTests';
 import Legal from './pages/Legal';
-import { Show, SignInButton, UserButton } from "@clerk/react";
 import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 
 const SUBJECTS = [
