@@ -26,7 +26,6 @@ const SUBJECTS = [
   { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: 'Zoology' },
   { name: 'CSIR NET', icon: '🎓' }
 ];
-
 ];
 
 export default function App() {
