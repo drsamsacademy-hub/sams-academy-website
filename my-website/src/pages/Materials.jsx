@@ -122,7 +122,7 @@ export default function Materials() {
               
               <p className="text-gray-600 whitespace-pre-wrap mb-4">{post.content}</p>
               
-              <div className="flex flex-wrap gap-3 mb-4">
+                            <div className="flex flex-wrap gap-3 mb-4">
                 {post.link_url && (
                   <a 
                     href={post.link_url} 
@@ -144,18 +144,8 @@ export default function Materials() {
                     <Download size={18} className="mr-2" /> Download File
                   </a>
                 )}
-              </div>
-                  <a 
-                    href={post.file_url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-5 py-2.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition"
-                  >
-                    <Download size={18} className="mr-2" /> Download File
-                  </a>
-                )}
                 
-                {/* NEW: WhatsApp Share Button */}
+                {/* WhatsApp Share Button */}
                 <button 
                   onClick={() => {
                     const text = `Check out this ${post.category} material on Dr. SAMS Academy: *${post.title}*\n\nhttps://drsamsacademy.in/materials`;
@@ -165,10 +155,7 @@ export default function Materials() {
                 >
                   <Share2 size={18} className="mr-2" /> Share
                 </button>
-              <p className="text-xs text-gray-400 mt-4 border-t pt-4">
-                Posted on: {new Date(post.created_at).toLocaleDateString()}
-              </p>
-            </div>
+              </div>
           ))}
         </div>
       )}
