@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useUser } from "@clerk/clerk-react";
-import { ArrowLeft, Flame, Award, BookOpen, Target } from 'lucide-react';
+import { ArrowLeft, Flame, Award, BookOpen, Target, Loader2 } from 'lucide-react';
 
 export default function Dashboard() {
-  const { user } = useUser();
+  const { isLoaded, user } = useUser();
   const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingResults, setLoadingResults] = useState(true);
   const [streak, setStreak] = useState(0);
 
+  // 1. Calculate Daily Streak
   useEffect(() => {
-    // 1. Calculate Daily Streak using Local Storage
     const today = new Date().toDateString();
     const lastVisit = localStorage.getItem('sams_last_visit');
     const currentStreak = parseInt(localStorage.getItem('sams_streak') || '0', 10);
@@ -19,35 +19,49 @@ export default function Dashboard() {
       yesterday.setDate(yesterday.getDate() - 1);
       
       if (lastVisit === yesterday.toDateString()) {
-        // They visited yesterday, increase streak
         setStreak(currentStreak + 1);
         localStorage.setItem('sams_streak', currentStreak + 1);
       } else {
-        // Streak broken, reset to 1
         setStreak(1);
         localStorage.setItem('sams_streak', 1);
       }
       localStorage.setItem('sams_last_visit', today);
     } else {
-      // Already visited today
       setStreak(currentStreak || 1);
     }
+  }, []);
 
-    // 2. Fetch Student's Test Results
-    if (user) {
-      fetch('https://sams-academy-plus.onrender.com/api/results')
-        .then(res => res.json())
-        .then(data => {
-          const myResults = data.filter(r => r.student_email === user.primaryEmailAddress?.emailAddress);
-          setResults(myResults);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error(err);
-          setLoading(false);
-        });
+  // 2. Fetch Student's Test Results safely
+  useEffect(() => {
+    if (isLoaded && user) {
+      const email = user.primaryEmailAddress?.emailAddress || user.emailAddresses[0]?.emailAddress;
+      
+      if (email) {
+        fetch('https://sams-academy-plus.onrender.com/api/results')
+          .then(res => res.json())
+          .then(data => {
+            const myResults = data.filter(r => r.student_email === email);
+            setResults(myResults);
+            setLoadingResults(false);
+          })
+          .catch(err => {
+            console.error(err);
+            setLoadingResults(false);
+          });
+      } else {
+        setLoadingResults(false);
+      }
     }
-  }, [user]);
+  }, [isLoaded, user]);
+
+  // Show a loading spinner if Clerk hasn't loaded yet
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin text-brand-600" size={48} />
+      </div>
+    );
+  }
 
   const averageScore = results.length > 0 
     ? Math.round((results.reduce((acc, curr) => acc + (curr.score / curr.total_questions), 0) / results.length) * 100) 
@@ -60,10 +74,12 @@ export default function Dashboard() {
       </a>
 
       <div className="flex items-center gap-4 mb-8">
-        <img src={user?.imageUrl} alt="Profile" className="w-16 h-16 rounded-full border-2 border-brand-500" />
+        <div className="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-2xl font-bold border-2 border-brand-500">
+          {user?.firstName?.charAt(0) || 'A'}
+        </div>
         <div>
           <h1 className="text-3xl font-display font-bold text-gray-900">Welcome back, {user?.firstName || 'Aspirant'}!</h1>
-          <p className="text-gray-500">{user?.primaryEmailAddress?.emailAddress}</p>
+          <p className="text-gray-500">{user?.primaryEmailAddress?.emailAddress || user?.emailAddresses[0]?.emailAddress}</p>
         </div>
       </div>
 
@@ -107,8 +123,10 @@ export default function Dashboard() {
           <h2 className="text-xl font-bold text-gray-800">My Mock Test History</h2>
         </div>
         
-        {loading ? (
-          <p className="p-6 text-gray-500">Loading your results...</p>
+        {loadingResults ? (
+          <div className="p-10 text-center flex justify-center">
+            <Loader2 className="animate-spin text-brand-600" size={32} />
+          </div>
         ) : results.length === 0 ? (
           <div className="p-10 text-center">
             <p className="text-gray-500 mb-4">You haven't taken any mock tests yet.</p>
