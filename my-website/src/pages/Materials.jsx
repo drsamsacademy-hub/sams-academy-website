@@ -4,7 +4,8 @@ import { ArrowLeft, Link as LinkIcon, Download, Search, Share2 } from 'lucide-re
 const CATEGORIES = [
   'All', 'Indian History', 'AP History', 'Geography', 
   'Constitution of India', 'Economy', 'Society', 
-  'Mental Ability', 'Assessments', 'APPGCET Zoology', 'Life Sciences', 'CSIR NET', Asst. Prof. Zoology'
+  'Mental Ability', 'Assessments', 'APPGCET Zoology', 
+  'Life Sciences', 'CSIR NET', 'Asst. Prof. Zoology'
 ];
 
 export default function Materials() {
@@ -12,10 +13,10 @@ export default function Materials() {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortOrder, setSortOrder] = useState('newest'); // 'newest' or 'oldest'
+  const [sortOrder, setSortOrder] = useState('newest');
 
   // Read the category from the URL on load
-    useEffect(() => {
+  useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const initialCategory = queryParams.get('cat') || 'All';
     const initialSearch = queryParams.get('search') || '';
@@ -38,24 +39,17 @@ export default function Materials() {
   }, []);
 
   // Filter and Sort the posts
-    const filteredPosts = posts
+  const filteredPosts = posts
     .filter(post => {
-      // 1. Hide Current Affairs from this page (they have their own News page)
       if (post.category === 'Current Affairs') return false;
-
-      // 2. Filter by Category
       const matchesCategory = activeCategory === 'All' || post.category === activeCategory;
-      
-      // 2. Filter by Search Text (Title or Content)
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch = 
         post.title.toLowerCase().includes(searchLower) || 
         post.content.toLowerCase().includes(searchLower);
-
       return matchesCategory && matchesSearch;
     })
     .sort((a, b) => {
-      // 3. Sort by Date
       const dateA = new Date(a.created_at).getTime();
       const dateB = new Date(b.created_at).getTime();
       return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
@@ -117,45 +111,53 @@ export default function Materials() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredPosts.map(post => (
             <div key={post.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-              <span className="text-xs font-bold text-brand-600 uppercase tracking-wider">{post.category}</span>
-              <h2 className="text-2xl font-bold text-gray-800 mt-1 mb-3">{post.title}</h2>
-              
-              <p className="text-gray-600 whitespace-pre-wrap mb-4">{post.content}</p>
-              
-                            <div className="flex flex-wrap gap-3 mb-4">
-                {post.link_url && (
-                  <a 
-                    href={post.link_url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-5 py-2.5 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition"
-                  >
-                    <LinkIcon size={18} className="mr-2" /> Open Link / Resource
-                  </a>
-                )}
-
-                {post.file_url && (
-                  <a 
-                    href={post.file_url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-5 py-2.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition"
-                  >
-                    <Download size={18} className="mr-2" /> Download File
-                  </a>
-                )}
-                
-                {/* WhatsApp Share Button */}
-                <button 
-                  onClick={() => {
-                    const text = `Check out this ${post.category} material on Dr. SAMS Academy: *${post.title}*\n\nhttps://drsamsacademy.in/materials`;
-                    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-                  }}
-                  className="inline-flex items-center px-5 py-2.5 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition"
-                >
-                  <Share2 size={18} className="mr-2" /> Share
-                </button>
+              <div>
+                <span className="text-xs font-bold text-brand-600 uppercase tracking-wider">{post.category}</span>
+                <h2 className="text-2xl font-bold text-gray-800 mt-1 mb-3">{post.title}</h2>
+                <p className="text-gray-600 whitespace-pre-wrap mb-4">{post.content}</p>
               </div>
+              
+              <div>
+                <div className="flex flex-wrap gap-3 mb-4">
+                  {post.link_url && (
+                    <a 
+                      href={post.link_url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-5 py-2.5 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition"
+                    >
+                      <LinkIcon size={18} className="mr-2" /> Open Link
+                    </a>
+                  )}
+
+                  {post.file_url && (
+                    <a 
+                      href={post.file_url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-5 py-2.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition"
+                    >
+                      <Download size={18} className="mr-2" /> Download
+                    </a>
+                  )}
+                  
+                  {/* WhatsApp Share Button */}
+                  <button 
+                    onClick={() => {
+                      const text = `Check out this ${post.category} material on Dr. SAMS Academy: *${post.title}*\n\nhttps://drsamsacademy.in/materials`;
+                      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                    }}
+                    className="inline-flex items-center px-5 py-2.5 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition"
+                  >
+                    <Share2 size={18} className="mr-2" /> Share
+                  </button>
+                </div>
+                
+                <p className="text-xs text-gray-400 mt-4 border-t pt-4">
+                  Posted on: {new Date(post.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       )}
