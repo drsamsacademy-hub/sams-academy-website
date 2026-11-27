@@ -222,10 +222,8 @@ export default function App() {
             <a href="/resources" className="hover:text-brand-600 transition">Resources</a>
             <a href="/jobs" className="hover:text-brand-600 transition">Jobs</a>
             <a href="/videos" className="hover:text-brand-600 transition">Videos</a>
-            <a href="/contact" className="hover:text-brand-600 transition">Contact</a>
             <a href="/news" className="hover:text-brand-600 transition">News</a>
             <a href="/tests" className="hover:text-brand-600 transition">Tests</a>
-            <a href="/testimonials" className="hover:text-brand-600 transition">Success Stories</a>
             <a href="/zoology" className="hover:text-brand-600 transition">Zoology</a>
           </div>
 
@@ -327,68 +325,57 @@ export default function App() {
         </div>
       </section>
 
-            {/* Footer */}
-      <footer className="mt-16 py-10 bg-white border-t border-gray-200">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <div className="text-sm text-gray-500 mb-4 space-y-1">
-            <p><strong>English:</strong> Prepared exclusively for educational purposes and competitive examination preparation. Information is compiled from official and reputed public sources. Readers are advised to verify important facts from official sources before relying on them.</p>
-            <p><strong>తెలుగు:</strong> ఈ మెటీరియల్ విద్యా మరియు పోటీ పరీక్షల సిద్ధత కోసం మాత్రమే రూపొందించబడింది. ముఖ్యమైన వివరాలను సంబంధిత అధికారిక వనరుల ద్వారా తప్పనిసరిగా ధృవీకరించండి.</p>
-          </div>
-                    <div className="pt-4 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
-            <p>© {new Date().getFullYear()} SAMS Academy · Built for aspirants 💪</p>
-            <div className="flex gap-4 mt-2 md:mt-0">
-              <a href="/legal" className="hover:text-brand-600 transition">Privacy & Terms</a>
-            </div>
-          </div>
-        </div>
-              {/* Featured Video Section */}
-      <section className="max-w-4xl mx-auto px-4 py-16">
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-gray-100">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-display font-bold text-gray-900 flex items-center gap-2">
-              <span className="text-brand-600">▶</span> Latest Video Lecture
+                  {/* Footer */}
+      <footer className="mt-16 bg-gray-900 text-gray-300 py-12 border-t border-gray-800">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+          
+          {/* Column 1: Brand & About */}
+          <div className="md:col-span-2">
+            <h2 className="text-2xl font-display font-bold text-white mb-4">
+              Dr. <span className="gradient-text">SAMS</span> Academy
             </h2>
-            <a href="/videos" className="text-brand-600 font-medium hover:underline text-sm">
-              View All Videos →
-            </a>
+            <p className="text-sm leading-relaxed mb-4 text-gray-400">
+              Dr. SAMS Academy is a premier online coaching platform providing daily curated notes, previous year question papers, and interactive mock tests for APPSC Group 1, Group 2, APPGCET, CSIR NET, and Asst. Prof. (Zoology) aspirants.
+            </p>
+            <p className="text-xs text-gray-500">
+              <strong>English:</strong> Prepared exclusively for educational purposes. Readers are advised to verify important facts from official sources before relying on them.
+            </p>
+            <p className="text-xs text-gray-500 mt-2">
+              <strong>తెలుగు:</strong> ఈ మెటీరియల్ విద్యా మరియు పోటీ పరీక్షల సిద్ధత కోసం మాత్రమే రూపొందించబడింది. ముఖ్యమైన వివరాలను సంబంధిత అధికారిక వనరుల ద్వారా తప్పనిసరిగా ధృవీకరించండి.
+            </p>
           </div>
-          
-          {/* REPLACE the YouTube ID below with your latest video's ID */}
-          <div className="aspect-video w-full rounded-xl overflow-hidden bg-gray-900 shadow-inner">
-            <iframe 
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/iZuup56ZDNA" 
-              title="Latest Video"
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowFullScreen
-            ></iframe>
+
+          {/* Column 2: Quick Links */}
+          <div>
+            <h3 className="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Quick Links</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="/materials" className="hover:text-brand-400 transition">Study Materials</a></li>
+              <li><a href="/tests" className="hover:text-brand-400 transition">Mock Tests</a></li>
+              <li><a href="/zoology" className="hover:text-brand-400 transition">Zoology Prep Hub</a></li>
+              <li><a href="/books" className="hover:text-brand-400 transition">My Publications</a></li>
+              <li><a href="/resources" className="hover:text-brand-400 transition">Resources (Syllabus/Papers)</a></li>
+              <li><a href="/jobs" className="hover:text-brand-400 transition">Job Notifications</a></li>
+            </ul>
           </div>
-          <p className="text-gray-500 text-sm mt-4 text-center">
-            Watch our latest class on <strong>Pituitary Gland</strong> by Dr. Sams.
-          </p>
-        </div>
-      </section>
-              {/* SEO & About Section */}
-      <section className="bg-white border-t border-gray-100 py-16">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-display font-bold text-gray-900 mb-6">
-            Why Choose <span className="gradient-text">Dr. SAMS Academy</span>?
-          </h2>
-          
-          <div className="text-gray-600 space-y-4 text-lg leading-relaxed text-left md:text-center">
-            <p>
-              Dr. SAMS Academy is a premier online coaching platform for competitive exam aspirants in Andhra Pradesh. We provide daily curated notes, previous year question papers, and interactive mock tests for <strong>APPSC Group 1, Group 2, APPGCET, and CSIR NET</strong>.
-            </p>
-            <p>
-              Our expert-led materials cover a wide range of subjects including <strong>Indian History, AP History, Geography, Constitution of India, Economy, and Mental Ability</strong>. 
-            </p>
-            <p>
-              We also offer specialized preparation resources for <strong>Assistant Professor (Zoology) recruitment</strong>, Junior Lecturer, Degree College Lecturer, APSET, and SLET aspirants, ensuring that every student has access to high-quality, reliable study material completely free of cost.
-            </p>
+
+          {/* Column 3: Support & Legal */}
+          <div>
+            <h3 className="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Support & Legal</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="/testimonials" className="hover:text-brand-400 transition">Success Stories</a></li>
+              <li><a href="/contact" className="hover:text-brand-400 transition">Contact Us (Submit Doubt)</a></li>
+              <li><a href="/legal" className="hover:text-brand-400 transition">Privacy Policy</a></li>
+              <li><a href="/legal" className="hover:text-brand-400 transition">Terms & Conditions</a></li>
+              <li><a href="/legal" className="hover:text-brand-400 transition">AI Usage Policy</a></li>
+            </ul>
           </div>
         </div>
-      </section>
+
+        {/* Bottom Copyright Bar */}
+        <div className="max-w-6xl mx-auto px-6 mt-12 pt-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+          <p>© {new Date().getFullYear()} Dr. SAMS Academy · Built for aspirants 💪</p>
+          <p className="mt-2 md:mt-0">Made with ❤️ for the aspirants of Andhra Pradesh</p>
+        </div>
       </footer>
     </div>
   );
