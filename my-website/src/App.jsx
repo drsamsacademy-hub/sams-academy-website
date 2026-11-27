@@ -13,6 +13,7 @@ import MockTests from './pages/MockTests';
 import Legal from './pages/Legal';
 import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 import Testimonials from './pages/Testimonials';
+import Zoology from './pages/Zoology';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -24,7 +25,7 @@ const SUBJECTS = [
   { name: 'Current Affairs', icon: '📰' },
   { name: 'Mental Ability', icon: '🧠' },
   { name: 'Assessments', icon: '📝' },
-  { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: 'Zoology' },
+    { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: '/zoology' },
   { name: 'CSIR NET', icon: '🎓' }
 ];
 
@@ -159,6 +160,10 @@ export default function App() {
     if (window.location.pathname === '/testimonials') {
     return <Testimonials />;
   }
+  // 12. Zoology
+    if (window.location.pathname === '/zoology') {
+    return <Zoology />;
+  }
   // Otherwise, show the Homepage
   return (
     <div className="min-h-screen">
@@ -202,6 +207,7 @@ export default function App() {
             <a href="/news" className="hover:text-brand-600 transition">News</a>
             <a href="/tests" className="hover:text-brand-600 transition">Tests</a>
             <a href="/testimonials" className="hover:text-brand-600 transition">Success Stories</a>
+            <a href="/zoology" className="hover:text-brand-600 transition">Zoology</a>
           </div>
 
           {/* Login / Profile Button */}
@@ -288,7 +294,7 @@ export default function App() {
             <motion.div key={cat.name}
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
-              <a href={cat.searchQuery ? `/materials?search=${cat.searchQuery}` : `/materials?cat=${encodeURIComponent(cat.name)}`} className="block p-6 bg-white rounded-2xl border border-gray-100 hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition cursor-pointer">
+              <a href={cat.searchQuery && cat.searchQuery.startsWith('/') ? cat.searchQuery : `/materials?cat=${encodeURIComponent(cat.name)}`} className="block p-6 bg-white rounded-2xl border border-gray-100 hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition cursor-pointer">
                  <div className="text-4xl mb-3">{cat.icon}</div>
                 <h3 className="font-semibold text-gray-800">{cat.name}</h3>
                 <p className="text-sm text-gray-500 mt-1">View notes →</p>
