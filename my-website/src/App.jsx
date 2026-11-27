@@ -237,7 +237,7 @@ export default function App() {
               </SignInButton>
             </Show>
                         <Show when="signed-in">
-              <a href="/dashboard" title="My Dashboard" className="p-2 text-gray-600 hover:text-brand-600 transition">
+              <a href="/dashboard" title="Dashboard" className="p-2 text-gray-600 hover:text-brand-600 transition">
                 <LayoutDashboard size={22} />
               </a>
             </Show>
@@ -362,7 +362,7 @@ export default function App() {
           <div>
             <h3 className="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Support & Legal</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="/testimonials" className="hover:text-brand-400 transition">Success Stories</a></li>
+              <li><a href="/testimonials" className="hover:text-brand-600 transition whitespace-nowrap">Testimonials</a>
               <li><a href="/contact" className="hover:text-brand-400 transition">Contact Us (Submit Doubt)</a></li>
               <li><a href="/legal" className="hover:text-brand-400 transition">Privacy Policy</a></li>
               <li><a href="/legal" className="hover:text-brand-400 transition">Terms & Conditions</a></li>
