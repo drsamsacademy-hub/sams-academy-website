@@ -25,7 +25,6 @@ const SUBJECTS = [
   { name: 'Assessments', icon: '📝' },
     { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: 'Zoology' }
   { name: 'Life Sciences', icon: '🧬' },
-  { name: 'CSIR NET', icon: '🎓' }
 
 ];
 
