@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Link as LinkIcon, Download, Search } from 'lucide-react';
+import { ArrowLeft, Link as LinkIcon, Download, Search, Share2 } from 'lucide-react';
 
 const CATEGORIES = [
   'All', 'Indian History', 'AP History', 'Geography', 
   'Constitution of India', 'Economy', 'Society', 
-  'Mental Ability', 'Assessments', 'APPGCET Zoology', 'Life Sciences', 'CSIR NET'
+  'Mental Ability', 'Assessments', 'APPGCET Zoology', 'Life Sciences', 'CSIR NET', Asst. Prof. Zoology'
 ];
 
 export default function Materials() {
@@ -145,7 +145,26 @@ export default function Materials() {
                   </a>
                 )}
               </div>
-
+                  <a 
+                    href={post.file_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-5 py-2.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition"
+                  >
+                    <Download size={18} className="mr-2" /> Download File
+                  </a>
+                )}
+                
+                {/* NEW: WhatsApp Share Button */}
+                <button 
+                  onClick={() => {
+                    const text = `Check out this ${post.category} material on Dr. SAMS Academy: *${post.title}*\n\nhttps://drsamsacademy.in/materials`;
+                    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                  }}
+                  className="inline-flex items-center px-5 py-2.5 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition"
+                >
+                  <Share2 size={18} className="mr-2" /> Share
+                </button>
               <p className="text-xs text-gray-400 mt-4 border-t pt-4">
                 Posted on: {new Date(post.created_at).toLocaleDateString()}
               </p>

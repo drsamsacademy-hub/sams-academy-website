@@ -90,6 +90,7 @@ export default function Admin() {
           </div>
           <select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} className="p-3 border rounded-lg w-full">
             <option>Indian History</option><option>AP History</option><option>Geography</option><option>Constitution of India</option><option>Economy</option><option>Society</option><option>Current Affairs</option><option>Mental Ability</option><option>Assessments</option><option>APPGCET Zoology</option><option>Life Sciences</option><option>CSIR NET</option><option>Syllabus</option><option>Previous Papers</option><option>Book</option><option>Job Portal</option><option>Video</option><option>Mock Test</option>
+          <option>Asst. Prof. Zoology</option>
           </select>
           <textarea required rows="3" value={formData.content} onChange={(e) => setFormData({...formData, content: e.target.value})} className="p-3 border rounded-lg w-full" placeholder="Content..." />
           <div className="grid md:grid-cols-2 gap-4">
