@@ -14,6 +14,7 @@ import Legal from './pages/Legal';
 import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 import Testimonials from './pages/Testimonials';
 import Zoology from './pages/Zoology';
+import Dashboard from './pages/Dashboard';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -39,7 +40,24 @@ export default function App() {
       window.location.href = `/materials?search=${encodeURIComponent(homeSearch)}`;
     }
   };
-
+ // Dashboard Route 
+  if (window.location.pathname === '/dashboard') {
+    return (
+      <Show when="signed-in" fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Login Required</h1>
+          <p className="text-gray-600 mb-6">Please log in to view your dashboard.</p>
+          <SignInButton mode="modal">
+            <button className="px-6 py-3 bg-brand-600 text-white rounded-lg font-bold hover:bg-brand-700 transition">
+              Student Login
+            </button>
+          </SignInButton>
+        </div>
+      }>
+        <Dashboard />
+      </Show>
+    );
+  }
   // 1. Admin Route
     if (window.location.pathname === '/admin') {
     return (
@@ -220,6 +238,11 @@ export default function App() {
               </SignInButton>
             </Show>
             <Show when="signed-in">
+                          <Show when="signed-in">
+              <a href="/dashboard" className="text-sm font-medium text-brand-600 hover:text-brand-700 mr-2 hidden md:block">
+                My Dashboard
+              </a>
+            </Show>
               <UserButton />
             </Show>
           </div>
