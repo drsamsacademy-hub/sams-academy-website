@@ -202,7 +202,7 @@ export default function App() {
           🎓 CSIR NET Life Sciences new batch starting soon!
         </marquee>
       </div>
-           {/* Navbar */}
+                 {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           
@@ -227,8 +227,13 @@ export default function App() {
             <a href="/zoology" className="hover:text-brand-600 transition">Zoology</a>
           </div>
 
-          {/* Login / Profile Button */}
-                              <div className="flex items-center gap-3">
+          {/* Right Side: Login & Dashboard */}
+          <div className="flex items-center gap-3">
+            <Show when="signed-in">
+              <a href="/dashboard" title="Dashboard" className="p-2 text-gray-600 hover:text-brand-600 transition hidden md:block">
+                <LayoutDashboard size={22} />
+              </a>
+            </Show>
             <Show when="signed-out">
               <SignInButton mode="modal">
                 <button className="px-4 py-2 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition text-sm">
@@ -236,17 +241,13 @@ export default function App() {
                 </button>
               </SignInButton>
             </Show>
-                        <Show when="signed-in">
-              <a href="/dashboard" title="Dashboard" className="p-2 text-gray-600 hover:text-brand-600 transition">
-                <LayoutDashboard size={22} />
-              </a>
-            </Show>
-            <UserButton />
+            <Show when="signed-in">
+              <UserButton />
             </Show>
           </div>
+
         </div>
       </nav>
-
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-50 via-white to-pink-50" />
@@ -361,7 +362,7 @@ export default function App() {
           <div>
             <h3 className="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Support & Legal</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="/testimonials" className="hover:text-brand-600 transition whitespace-nowrap">Testimonials</a>
+                            <li><a href="/testimonials" className="hover:text-brand-400 transition">Testimonials</a></li>
               <li><a href="/contact" className="hover:text-brand-400 transition">Contact Us (Submit Doubt)</a></li>
               <li><a href="/legal" className="hover:text-brand-400 transition">Privacy Policy</a></li>
               <li><a href="/legal" className="hover:text-brand-400 transition">Terms & Conditions</a></li>
