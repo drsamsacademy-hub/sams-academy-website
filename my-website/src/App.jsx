@@ -15,6 +15,7 @@ import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 import Testimonials from './pages/Testimonials';
 import Zoology from './pages/Zoology';
 import Dashboard from './pages/Dashboard';
+import { BookOpen, Sparkles, Target, TrendingUp, LayoutDashboard } from 'lucide-react';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -237,13 +238,12 @@ export default function App() {
                 </button>
               </SignInButton>
             </Show>
-            <Show when="signed-in">
-                          <Show when="signed-in">
-              <a href="/dashboard" className="text-sm font-medium text-brand-600 hover:text-brand-700 mr-2 hidden md:block">
-                My Dashboard
+                        <Show when="signed-in">
+              <a href="/dashboard" title="My Dashboard" className="p-2 text-gray-600 hover:text-brand-600 transition">
+                <LayoutDashboard size={22} />
               </a>
             </Show>
-              <UserButton />
+            <UserButton />
             </Show>
           </div>
 
