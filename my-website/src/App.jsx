@@ -15,7 +15,6 @@ import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 import Testimonials from './pages/Testimonials';
 import Zoology from './pages/Zoology';
 import Dashboard from './pages/Dashboard';
-import { BookOpen, Sparkles, Target, TrendingUp, LayoutDashboard } from 'lucide-react';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
