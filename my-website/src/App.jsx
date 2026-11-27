@@ -307,6 +307,34 @@ export default function App() {
             </div>
           </div>
         </div>
+              {/* Featured Video Section */}
+      <section className="max-w-4xl mx-auto px-4 py-16">
+        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-gray-100">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-display font-bold text-gray-900 flex items-center gap-2">
+              <span className="text-brand-600">▶</span> Latest Video Lecture
+            </h2>
+            <a href="/videos" className="text-brand-600 font-medium hover:underline text-sm">
+              View All Videos →
+            </a>
+          </div>
+          
+          {/* REPLACE the YouTube ID below with your latest video's ID */}
+          <div className="aspect-video w-full rounded-xl overflow-hidden bg-gray-900 shadow-inner">
+            <iframe 
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+              title="Latest Video"
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen
+            ></iframe>
+          </div>
+          <p className="text-gray-500 text-sm mt-4 text-center">
+            Watch our latest class on <strong>Genetics Terminology</strong> by Dr. Sams.
+          </p>
+        </div>
+      </section>
               {/* SEO & About Section */}
       <section className="bg-white border-t border-gray-100 py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
