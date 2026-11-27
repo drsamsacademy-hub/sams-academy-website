@@ -12,6 +12,7 @@ import CurrentAffairs from './pages/CurrentAffairs';
 import MockTests from './pages/MockTests';
 import Legal from './pages/Legal';
 import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
+import Testimonials from './pages/Testimonials';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -154,7 +155,10 @@ export default function App() {
   if (window.location.pathname === '/legal') {
     return <Legal />;
   }
-
+// 11. Testimonials
+    if (window.location.pathname === '/testimonials') {
+    return <Testimonials />;
+  }
   // Otherwise, show the Homepage
   return (
     <div className="min-h-screen">
@@ -197,6 +201,7 @@ export default function App() {
             <a href="/contact" className="hover:text-brand-600 transition">Contact</a>
             <a href="/news" className="hover:text-brand-600 transition">News</a>
             <a href="/tests" className="hover:text-brand-600 transition">Tests</a>
+            <a href="/testimonials" className="hover:text-brand-600 transition">Success Stories</a>
           </div>
 
           {/* Login / Profile Button */}
