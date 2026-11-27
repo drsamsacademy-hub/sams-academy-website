@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Sparkles, Target, TrendingUp } from 'lucide-react';
+import { BookOpen, Sparkles, Target, TrendingUp, LayoutDashboard } from 'lucide-react';
 import Admin from './pages/Admin';
 import Materials from './pages/Materials';
 import Books from './pages/Books';
@@ -41,7 +41,7 @@ export default function App() {
       window.location.href = `/materials?search=${encodeURIComponent(homeSearch)}`;
     }
   };
- // Dashboard Route 
+   // Dashboard Route
   if (window.location.pathname === '/dashboard') {
     return (
       <Show when="signed-in" fallback={
@@ -244,7 +244,6 @@ export default function App() {
             <UserButton />
             </Show>
           </div>
-
         </div>
       </nav>
 
