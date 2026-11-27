@@ -23,8 +23,9 @@ const SUBJECTS = [
   { name: 'Current Affairs', icon: '📰' },
   { name: 'Mental Ability', icon: '🧠' },
   { name: 'Assessments', icon: '📝' },
-    { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: 'Zoology' }
-  { name: 'Life Sciences', icon: '🧬' },
+  { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: 'Zoology' },
+  { name: 'CSIR NET', icon: '🎓' }
+];
 
 ];
 
@@ -284,7 +285,7 @@ export default function App() {
             <motion.div key={cat.name}
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
-              <a href={cat.searchQuery ? `/materials?search=${cat.searchQuery}` : `/materials?cat=${encodeURIComponent(cat.name)}`} ...>
+              <a href={cat.searchQuery ? `/materials?search=${cat.searchQuery}` : `/materials?cat=${encodeURIComponent(cat.name)}`} className="block p-6 bg-white rounded-2xl border border-gray-100 hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition cursor-pointer">
                 <h3 className="font-semibold text-gray-800">{cat.name}</h3>
                 <p className="text-sm text-gray-500 mt-1">View notes →</p>
               </a>
