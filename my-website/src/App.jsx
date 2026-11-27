@@ -308,6 +308,26 @@ export default function App() {
             </div>
           </div>
         </div>
+              {/* SEO & About Section */}
+      <section className="bg-white border-t border-gray-100 py-16">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-display font-bold text-gray-900 mb-6">
+            Why Choose <span className="gradient-text">Dr. SAMS Academy</span>?
+          </h2>
+          
+          <div className="text-gray-600 space-y-4 text-lg leading-relaxed text-left md:text-center">
+            <p>
+              Dr. SAMS Academy is a premier online coaching platform for competitive exam aspirants in Andhra Pradesh. We provide daily curated notes, previous year question papers, and interactive mock tests for <strong>APPSC Group 1, Group 2, APPGCET, and CSIR NET</strong>.
+            </p>
+            <p>
+              Our expert-led materials cover a wide range of subjects including <strong>Indian History, AP History, Geography, Constitution of India, Economy, and Mental Ability</strong>. 
+            </p>
+            <p>
+              We also offer specialized preparation resources for <strong>Assistant Professor (Zoology) recruitment</strong>, Junior Lecturer, Degree College Lecturer, APSET, and SLET aspirants, ensuring that every student has access to high-quality, reliable study material completely free of cost.
+            </p>
+          </div>
+        </div>
+      </section>
       </footer>
     </div>
   );
