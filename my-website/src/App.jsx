@@ -323,7 +323,7 @@ export default function App() {
           <div className="aspect-video w-full rounded-xl overflow-hidden bg-gray-900 shadow-inner">
             <iframe 
               className="w-full h-full"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+              src="https://www.youtube.com/embed/iZuup56ZDNA" 
               title="Latest Video"
               frameBorder="0" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -331,7 +331,7 @@ export default function App() {
             ></iframe>
           </div>
           <p className="text-gray-500 text-sm mt-4 text-center">
-            Watch our latest class on <strong>Genetics Terminology</strong> by Dr. Sams.
+            Watch our latest class on <strong>Pituitary Gland</strong> by Dr. Sams.
           </p>
         </div>
       </section>
