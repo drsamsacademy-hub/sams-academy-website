@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
-
+import { useUser } from "@clerk/clerk-react";
 const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
   // The question text is everything except the last line
   const questionText = q.lines[0];
@@ -52,6 +52,7 @@ const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
 };
 
 export default function MockTests() {
+    const { user } = useUser();
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTest, setActiveTest] = useState(null);
@@ -152,13 +153,41 @@ export default function MockTests() {
               ))}
 
               <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 sticky bottom-4">
-                {!showResults ? (
+                                {!showResults ? (
                   <button 
-                    onClick={() => setShowResults(true)}
+                    onClick={async () => {
+                      setShowResults(true);
+                      const finalScore = calculateScore();
+                      const totalQs = parseQuestions(activeTest.content).length;
+                      
+                      // Save score to database
+                      if (user) {
+                        try {
+                          const email = user.primaryEmailAddress?.emailAddress || (user.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : null);
+                          
+                          if (email) {
+                            await fetch('https://sams-academy-plus.onrender.com/api/results', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                email: email,
+                                name: user.fullName || 'Student',
+                                testTitle: activeTest.title,
+                                score: finalScore,
+                                total: totalQs
+                              })
+                            });
+                          }
+                        } catch (err) {
+                          console.error("Failed to save score", err);
+                        }
+                      }
+                    }}
                     className="w-full bg-gray-900 text-white font-bold py-3 rounded-lg hover:bg-gray-800 transition"
                   >
                     Submit Test & See Score
                   </button>
+                ) : (
                 ) : (
                   <div className="text-center">
                     <h3 className="text-2xl font-bold text-gray-800 mb-2">
