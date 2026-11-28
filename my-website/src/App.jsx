@@ -41,22 +41,9 @@ export default function App() {
     }
   };
    // Dashboard Route
+    // Dashboard Route
   if (window.location.pathname === '/dashboard') {
-    return (
-      <Show when="signed-in" fallback={
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">Login Required</h1>
-          <p className="text-gray-600 mb-6">Please log in to view your dashboard.</p>
-          <SignInButton mode="modal">
-            <button className="px-6 py-3 bg-brand-600 text-white rounded-lg font-bold hover:bg-brand-700 transition">
-              Student Login
-            </button>
-          </SignInButton>
-        </div>
-      }>
-        <Dashboard />
-      </Show>
-    );
+    return <Dashboard />;
   }
   // 1. Admin Route
     if (window.location.pathname === '/admin') {
