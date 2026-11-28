@@ -1,21 +1,16 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
 import { useUser } from "@clerk/clerk-react";
+
 const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
-  // The question text is everything except the last line
   const questionText = q.lines[0];
-  
-  // Extract the correct answer from the last line
   const answerLine = q.lines[q.lines.length - 1];
   const correctAnswer = answerLine.replace(/Answer:/i, '').trim().toUpperCase();
-
-  // Options are lines starting with A, B, C, or D
   const options = q.lines.filter(line => /^[A-D][\.\)]/.test(line.trim().toUpperCase()));
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">{questionText}</h2>
-
+      <h2 className="text-lg font-bold text-gray-800 mb-4">{questionText}</h2>
       <div className="space-y-3">
         {options.map((opt, i) => {
           const letter = opt.trim().charAt(0).toUpperCase();
@@ -52,7 +47,7 @@ const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
 };
 
 export default function MockTests() {
-    const { user } = useUser();
+  const { user } = useUser();
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTest, setActiveTest] = useState(null);
@@ -73,29 +68,50 @@ export default function MockTests() {
       });
   }, []);
 
-  // A simpler, foolproof way to split the text into questions
   const parseQuestions = (content) => {
-    // This finds any line that starts with a number and a dot (e.g., "1. ")
-    // and splits the text there.
     const parts = content.split(/\n(?=\d+\.)/);
-    
     return parts.map(part => {
       const lines = part.split('\n').map(line => line.trim()).filter(line => line !== '');
       return { lines };
-    }).filter(q => q.lines.length > 1); // Ignore empty blocks
+    }).filter(q => q.lines.length > 1);
   };
 
   const calculateScore = () => {
     let score = 0;
     const qs = parseQuestions(activeTest.content);
-    
     qs.forEach((q, index) => {
       const answerLine = q.lines[q.lines.length - 1];
       const correct = answerLine.replace(/Answer:/i, '').trim().toUpperCase();
       if (answers[index] === correct) score++;
     });
-    
     return score;
+  };
+
+  const handleSubmit = async () => {
+    setShowResults(true);
+    const finalScore = calculateScore();
+    const totalQs = parseQuestions(activeTest.content).length;
+    
+    if (user) {
+      try {
+        const email = user.primaryEmailAddress?.emailAddress || (user.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : null);
+        if (email) {
+          await fetch('https://sams-academy-plus.onrender.com/api/results', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: email,
+              name: user.fullName || 'Student',
+              testTitle: activeTest.title,
+              score: finalScore,
+              total: totalQs
+            })
+          });
+        }
+      } catch (err) {
+        console.error("Failed to save score", err);
+      }
+    }
   };
 
   return (
@@ -153,35 +169,9 @@ export default function MockTests() {
               ))}
 
               <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 sticky bottom-4">
-                                                {!showResults ? (
+                {!showResults ? (
                   <button 
-                    onClick={async () => {
-                      setShowResults(true);
-                      const finalScore = calculateScore();
-                      const totalQs = parseQuestions(activeTest.content).length;
-                      
-                      if (user) {
-                        try {
-                          const email = user.primaryEmailAddress?.emailAddress || (user.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : null);
-                          
-                          if (email) {
-                            await fetch('https://sams-academy-plus.onrender.com/api/results', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                email: email,
-                                name: user.fullName || 'Student',
-                                testTitle: activeTest.title,
-                                score: finalScore,
-                                total: totalQs
-                              })
-                            });
-                          }
-                        } catch (err) {
-                          console.error("Failed to save score", err);
-                        }
-                      }
-                    }}
+                    onClick={handleSubmit}
                     className="w-full bg-gray-900 text-white font-bold py-3 rounded-lg hover:bg-gray-800 transition"
                   >
                     Submit Test & See Score
