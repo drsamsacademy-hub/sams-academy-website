@@ -62,11 +62,10 @@ function StudentDashboard() {
       .catch(() => setLoading(false));
   }, [isLoaded, user]);
 
-  // Calculate current streak (consecutive days with at least one test)
+  // Calculate current streak
   const calculateStreak = () => {
     if (results.length === 0) return 0;
 
-    // Get unique dates (YYYY-MM-DD) of tests, newest first
     const uniqueDays = [...new Set(
       results.map(r => new Date(r.created_at).toDateString())
     )];
@@ -83,14 +82,20 @@ function StudentDashboard() {
 
       if (diffDays === streak) {
         streak++;
-        // Move expected date one day back
         currentDate.setDate(currentDate.getDate() - 1);
       } else if (diffDays > streak) {
-        break; // gap found
+        break;
       }
     }
 
     return streak;
+  };
+
+  // Check if student already took a test today
+  const hasTestToday = () => {
+    if (results.length === 0) return false;
+    const today = new Date().toDateString();
+    return results.some(r => new Date(r.created_at).toDateString() === today);
   };
 
   const streak = calculateStreak();
@@ -98,6 +103,7 @@ function StudentDashboard() {
   const bestScore = results.length > 0
     ? Math.max(...results.map(r => Math.round((r.score / r.total_questions) * 100)))
     : 0;
+  const tookTestToday = hasTestToday();
 
   return (
     <div className="max-w-4xl mx-auto p-6 mt-8">
@@ -111,7 +117,7 @@ function StudentDashboard() {
       </p>
 
       {/* ===== STREAK BADGE ===== */}
-      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-2xl p-6 mb-8 shadow-lg relative overflow-hidden">
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-2xl p-6 mb-6 shadow-lg relative overflow-hidden">
         <div className="relative z-10 flex items-center justify-between">
           <div>
             <p className="text-sm font-medium opacity-90 mb-1">Your Daily Streak</p>
@@ -131,6 +137,27 @@ function StudentDashboard() {
           <div className="text-6xl opacity-30">🔥</div>
         </div>
       </div>
+
+      {/* ===== STREAK AT RISK BUTTON ===== */}
+      {!tookTestToday && (
+        <div className="mb-8">
+          <a
+            href="/tests"
+            className="flex items-center justify-center gap-3 w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 rounded-xl transition shadow-md"
+          >
+            <span className="text-xl">⚡</span>
+            {streak > 0
+              ? `Take today's test to keep your ${streak}-day streak!`
+              : "Take a test today & start your streak!"}
+            <span className="text-xl">→</span>
+          </a>
+          {streak > 0 && (
+            <p className="text-center text-sm text-orange-600 mt-2 font-medium">
+              Don't break the chain! 🔥
+            </p>
+          )}
+        </div>
+      )}
 
       {/* ===== QUICK STATS ===== */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
