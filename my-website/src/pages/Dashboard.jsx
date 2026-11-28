@@ -31,10 +31,11 @@ export default function Dashboard() {
     }
   }, []);
 
-  // 2. Fetch Student's Test Results safely
+  // 2. Fetch Test Results (Safely waiting for Clerk to load)
   useEffect(() => {
     if (isLoaded && user) {
-      const email = user.primaryEmailAddress?.emailAddress || user.emailAddresses[0]?.emailAddress;
+      // Safely get the email address
+      const email = user.primaryEmailAddress?.emailAddress || (user.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : null);
       
       if (email) {
         fetch('https://sams-academy-plus.onrender.com/api/results')
@@ -45,7 +46,7 @@ export default function Dashboard() {
             setLoadingResults(false);
           })
           .catch(err => {
-            console.error(err);
+            console.error("Error fetching results:", err);
             setLoadingResults(false);
           });
       } else {
@@ -57,11 +58,14 @@ export default function Dashboard() {
   // Show a loading spinner if Clerk hasn't loaded yet
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <Loader2 className="animate-spin text-brand-600" size={48} />
       </div>
     );
   }
+
+  // Safely display the email
+  const displayEmail = user?.primaryEmailAddress?.emailAddress || (user?.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : 'No email found');
 
   const averageScore = results.length > 0 
     ? Math.round((results.reduce((acc, curr) => acc + (curr.score / curr.total_questions), 0) / results.length) * 100) 
@@ -75,11 +79,11 @@ export default function Dashboard() {
 
       <div className="flex items-center gap-4 mb-8">
         <div className="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-2xl font-bold border-2 border-brand-500">
-          {user?.firstName?.charAt(0) || 'A'}
+          {user?.firstName?.charAt(0) || displayEmail.charAt(0).toUpperCase()}
         </div>
         <div>
           <h1 className="text-3xl font-display font-bold text-gray-900">Welcome back, {user?.firstName || 'Aspirant'}!</h1>
-          <p className="text-gray-500">{user?.primaryEmailAddress?.emailAddress || user?.emailAddresses[0]?.emailAddress}</p>
+          <p className="text-gray-500">{displayEmail}</p>
         </div>
       </div>
 
