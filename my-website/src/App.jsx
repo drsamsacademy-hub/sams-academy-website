@@ -29,12 +29,6 @@ const SUBJECTS = [
     { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: '/zoology' },
   { name: 'CSIR NET', icon: '🎓' }
 ];
-// Safe Dashboard Component
-const DashboardContent = () => {
-  const { user, isLoaded } = useUser();
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     if (isLoaded && user) {
       const email = user.primaryEmailAddress?.emailAddress;
@@ -103,9 +97,27 @@ export default function App() {
       window.location.href = `/materials?search=${encodeURIComponent(homeSearch)}`;
     }
   };
-            // Dashboard Route
+              // Dashboard Route
   if (window.location.pathname === '/dashboard') {
-    return <DashboardContent />;
+    return (
+      <div className="max-w-4xl mx-auto p-6 mt-8">
+        <a href="/" className="inline-flex items-center text-brand-600 hover:underline mb-6 font-medium">
+          &larr; Back to Home
+        </a>
+        <h1 className="text-3xl font-bold mb-6">Student Dashboard</h1>
+        
+        <div className="bg-white p-6 rounded-xl border shadow-sm mb-6">
+          <h2 className="text-gray-500 text-sm">Account Status</h2>
+          <p className="text-lg font-bold text-green-600">Logged In Successfully</p>
+          <p className="text-sm text-gray-500">{user?.primaryEmailAddress?.emailAddress || 'Student'}</p>
+        </div>
+
+        <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+          <h2 className="text-xl font-bold p-6 border-b bg-gray-50">My Test History</h2>
+          <p className="p-6 text-gray-500">Your test results will appear here soon. (This page is under construction).</p>
+        </div>
+      </div>
+    );
   }
   // 1. Admin Route
     if (window.location.pathname === '/admin') {
