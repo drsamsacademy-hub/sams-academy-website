@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
-import { useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/react";   // ← needed for user
 
 const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
   const questionText = q.lines[0];
@@ -26,7 +26,10 @@ const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
           }
 
           return (
-            <label key={i} className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-colors ${bgClass}`}>
+            <label 
+              key={i} 
+              className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-colors ${bgClass}`}
+            >
               <input 
                 type="radio" 
                 name={`q-${index}`} 
@@ -47,7 +50,7 @@ const QuestionBlock = ({ q, index, answers, setAnswers, showResults }) => {
 };
 
 export default function MockTests() {
-  const { user } = useUser();
+  const { user } = useUser();                     // ← get user from Clerk
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTest, setActiveTest] = useState(null);
@@ -69,6 +72,7 @@ export default function MockTests() {
   }, []);
 
   const parseQuestions = (content) => {
+    if (!content) return [];
     const parts = content.split(/\n(?=\d+\.)/);
     return parts.map(part => {
       const lines = part.split('\n').map(line => line.trim()).filter(line => line !== '');
@@ -77,6 +81,7 @@ export default function MockTests() {
   };
 
   const calculateScore = () => {
+    if (!activeTest) return 0;
     let score = 0;
     const qs = parseQuestions(activeTest.content);
     qs.forEach((q, index) => {
@@ -89,12 +94,16 @@ export default function MockTests() {
 
   const handleSubmit = async () => {
     setShowResults(true);
+
     const finalScore = calculateScore();
     const totalQs = parseQuestions(activeTest.content).length;
-    
+
     if (user) {
       try {
-        const email = user.primaryEmailAddress?.emailAddress || (user.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : null);
+        const email = user.primaryEmailAddress?.emailAddress 
+          || (user.emailAddresses?.[0]?.emailAddress) 
+          || null;
+
         if (email) {
           await fetch('https://sams-academy-plus.onrender.com/api/results', {
             method: 'POST',
