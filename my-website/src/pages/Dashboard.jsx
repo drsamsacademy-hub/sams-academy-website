@@ -3,12 +3,12 @@ import { useUser } from "@clerk/clerk-react";
 import { ArrowLeft, Flame, Award, BookOpen, Target, Loader2 } from 'lucide-react';
 
 export default function Dashboard() {
-  const { isLoaded, user } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
   const [results, setResults] = useState([]);
   const [loadingResults, setLoadingResults] = useState(true);
-  const [streak, setStreak] = useState(0);
+  const [streak, setStreak] = useState(1);
 
-  // 1. Calculate Daily Streak
+  // 1. Calculate Streak (Safe, runs once)
   useEffect(() => {
     const today = new Date().toDateString();
     const lastVisit = localStorage.getItem('sams_last_visit');
@@ -31,11 +31,10 @@ export default function Dashboard() {
     }
   }, []);
 
-  // 2. Fetch Test Results (Safely waiting for Clerk to load)
+  // 2. Fetch Results (Only runs when Clerk is fully loaded)
   useEffect(() => {
-    if (isLoaded && user) {
-      // Safely get the email address
-      const email = user.primaryEmailAddress?.emailAddress || (user.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : null);
+    if (isLoaded && isSignedIn && user) {
+      const email = user.primaryEmailAddress?.emailAddress;
       
       if (email) {
         fetch('https://sams-academy-plus.onrender.com/api/results')
@@ -46,27 +45,40 @@ export default function Dashboard() {
             setLoadingResults(false);
           })
           .catch(err => {
-            console.error("Error fetching results:", err);
+            console.error(err);
             setLoadingResults(false);
           });
       } else {
         setLoadingResults(false);
       }
     }
-  }, [isLoaded, user]);
+  }, [isLoaded, isSignedIn, user]);
 
-  // Show a loading spinner if Clerk hasn't loaded yet
+  // --- THE CRUCIAL FIX ---
+  // If Clerk hasn't loaded the user yet, show a spinner instead of crashing.
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="animate-spin text-brand-600" size={48} />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+        <Loader2 className="animate-spin text-brand-600 mb-4" size={48} />
+        <p className="text-gray-500">Loading your dashboard...</p>
       </div>
     );
   }
 
-  // Safely display the email
-  const displayEmail = user?.primaryEmailAddress?.emailAddress || (user?.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : 'No email found');
+  // If somehow not signed in, show a message
+  if (!isSignedIn) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+        <h1 className="text-2xl font-bold text-gray-800">Please log in to view your dashboard.</h1>
+        <a href="/" className="mt-4 text-brand-600 underline">Go to Home</a>
+      </div>
+    );
+  }
 
+  // Safe variables
+  const displayEmail = user?.primaryEmailAddress?.emailAddress || 'Student';
+  const displayName = user?.firstName || displayEmail.split('@')[0];
+  
   const averageScore = results.length > 0 
     ? Math.round((results.reduce((acc, curr) => acc + (curr.score / curr.total_questions), 0) / results.length) * 100) 
     : 0;
@@ -78,11 +90,11 @@ export default function Dashboard() {
       </a>
 
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-2xl font-bold border-2 border-brand-500">
-          {user?.firstName?.charAt(0) || displayEmail.charAt(0).toUpperCase()}
+        <div className="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-2xl font-bold border-2 border-brand-500 uppercase">
+          {displayName.charAt(0)}
         </div>
         <div>
-          <h1 className="text-3xl font-display font-bold text-gray-900">Welcome back, {user?.firstName || 'Aspirant'}!</h1>
+          <h1 className="text-3xl font-display font-bold text-gray-900">Welcome back, {displayName}!</h1>
           <p className="text-gray-500">{displayEmail}</p>
         </div>
       </div>
