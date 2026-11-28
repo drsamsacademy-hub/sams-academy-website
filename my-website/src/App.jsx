@@ -28,7 +28,7 @@ const SUBJECTS = [
     { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: '/zoology' },
   { name: 'CSIR NET', icon: '🎓' }
 ];
-// Mini Dashboard Component (Built directly into App.jsx to prevent crashes)
+// Mini Dashboard Component
 const MiniDashboard = () => {
   const { isLoaded, isSignedIn, user } = useUser();
   const [results, setResults] = useState([]);
@@ -45,11 +45,15 @@ const MiniDashboard = () => {
             setLoading(false);
           })
           .catch(() => setLoading(false));
+      } else {
+        setLoading(false);
       }
     }
   }, [isLoaded, isSignedIn, user]);
 
-  if (!isLoaded) return <div className="min-h-screen flex items-center justify-center text-xl">Loading...</div>;
+  if (!isLoaded) {
+    return <div className="min-h-screen flex items-center justify-center text-xl">Loading...</div>;
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 mt-8">
