@@ -29,6 +29,70 @@ const SUBJECTS = [
     { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: '/zoology' },
   { name: 'CSIR NET', icon: '🎓' }
 ];
+// Safe Dashboard Component
+const DashboardContent = () => {
+  const { user, isLoaded } = useUser();
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      const email = user.primaryEmailAddress?.emailAddress;
+      if (email) {
+        fetch('https://sams-academy-plus.onrender.com/api/results')
+          .then(res => res.json())
+          .then(data => {
+            setResults(data.filter(r => r.student_email === email));
+            setLoading(false);
+          })
+          .catch(() => setLoading(false));
+      }
+    }
+  }, [isLoaded, user]);
+
+  return (
+    <div className="max-w-4xl mx-auto p-6 mt-8">
+      <a href="/" className="inline-flex items-center text-brand-600 hover:underline mb-6 font-medium">
+        &larr; Back to Home
+      </a>
+      <h1 className="text-3xl font-bold mb-6">Student Dashboard</h1>
+      
+      <div className="bg-white p-6 rounded-xl border shadow-sm mb-6">
+        <h2 className="text-gray-500 text-sm">Account Status</h2>
+        <p className="text-lg font-bold text-green-600">Logged In Successfully</p>
+        <p className="text-sm text-gray-500">{user?.primaryEmailAddress?.emailAddress}</p>
+      </div>
+
+      <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+        <h2 className="text-xl font-bold p-6 border-b bg-gray-50">My Test History</h2>
+        {loading ? (
+          <p className="p-6 text-gray-500">Loading results...</p>
+        ) : results.length === 0 ? (
+          <p className="p-6 text-gray-500">You haven't taken any tests yet. Go to the Tests page to attempt one!</p>
+        ) : (
+          <table className="w-full text-left">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="p-4 border-b">Test Name</th>
+                <th className="p-4 border-b">Score</th>
+                <th className="p-4 border-b">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.map(r => (
+                <tr key={r.id} className="border-b">
+                  <td className="p-4 font-medium">{r.test_title}</td>
+                  <td className="p-4 font-bold text-brand-600">{r.score} / {r.total_questions}</td>
+                  <td className="p-4 text-gray-500">{new Date(r.created_at).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+};
 export default function App() {
     const { user } = useUser();
       const [homeSearch, setHomeSearch] = useState('');
@@ -39,26 +103,9 @@ export default function App() {
       window.location.href = `/materials?search=${encodeURIComponent(homeSearch)}`;
     }
   };
-           // Dashboard Route
+            // Dashboard Route
   if (window.location.pathname === '/dashboard') {
-    return (
-      <div className="max-w-4xl mx-auto p-6 mt-8">
-        <a href="/" className="inline-flex items-center text-brand-600 hover:underline mb-6 font-medium">
-          &larr; Back to Home
-        </a>
-        <h1 className="text-3xl font-bold mb-6">Student Dashboard</h1>
-        
-        <div className="bg-white p-6 rounded-xl border shadow-sm mb-6">
-          <h2 className="text-gray-500 text-sm">Account Status</h2>
-          <p className="text-lg font-bold">Logged In</p>
-        </div>
-
-        <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
-          <h2 className="text-xl font-bold p-6 border-b bg-gray-50">My Test History</h2>
-          <p className="p-6 text-gray-500">Your test results will appear here soon.</p>
-        </div>
-      </div>
-    );
+    return <DashboardContent />;
   }
   // 1. Admin Route
     if (window.location.pathname === '/admin') {
