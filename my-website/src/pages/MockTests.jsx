@@ -153,14 +153,13 @@ export default function MockTests() {
               ))}
 
               <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 sticky bottom-4">
-                                {!showResults ? (
+                                                {!showResults ? (
                   <button 
                     onClick={async () => {
                       setShowResults(true);
                       const finalScore = calculateScore();
                       const totalQs = parseQuestions(activeTest.content).length;
                       
-                      // Save score to database
                       if (user) {
                         try {
                           const email = user.primaryEmailAddress?.emailAddress || (user.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : null);
@@ -187,7 +186,6 @@ export default function MockTests() {
                   >
                     Submit Test & See Score
                   </button>
-                ) : (
                 ) : (
                   <div className="text-center">
                     <h3 className="text-2xl font-bold text-gray-800 mb-2">
