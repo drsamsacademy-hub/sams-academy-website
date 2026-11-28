@@ -11,7 +11,7 @@ import Contact from './pages/Contact';
 import CurrentAffairs from './pages/CurrentAffairs';
 import MockTests from './pages/MockTests';
 import Legal from './pages/Legal';
-import { Show, SignInButton, UserButton } from "@clerk/react";
+import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 import Testimonials from './pages/Testimonials';
 import Zoology from './pages/Zoology';
 import Dashboard from './pages/Dashboard';
@@ -31,6 +31,7 @@ const SUBJECTS = [
 ];
 
 export default function App() {
+    const { user } = useUser();
       const [homeSearch, setHomeSearch] = useState('');
 
   const handleSearch = (e) => {

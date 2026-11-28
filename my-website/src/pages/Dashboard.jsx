@@ -94,7 +94,7 @@ export default function Dashboard() {
           {displayName.charAt(0)}
         </div>
         <div>
-          <h1 className="text-3xl font-display font-bold text-gray-900">Welcome back, {displayName}!</h1>
+          <h1 className="text-3xl font-display font-bold text-gray-900">Welcome back!</h1>
           <p className="text-gray-500">{displayEmail}</p>
         </div>
       </div>
