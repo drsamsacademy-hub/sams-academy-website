@@ -14,7 +14,6 @@ import Legal from './pages/Legal';
 import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 import Testimonials from './pages/Testimonials';
 import Zoology from './pages/Zoology';
-import Dashboard from './pages/Dashboard';
 
 const SUBJECTS = [
   { name: 'Indian History', icon: '🏛️' },
@@ -29,7 +28,72 @@ const SUBJECTS = [
     { name: 'Zoology (All Exams)', icon: '🧬', searchQuery: '/zoology' },
   { name: 'CSIR NET', icon: '🎓' }
 ];
+// Mini Dashboard Component (Built directly into App.jsx to prevent crashes)
+const MiniDashboard = () => {
+  const { isLoaded, isSignedIn, user } = useUser();
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      const email = user.primaryEmailAddress?.emailAddress;
+      if (email) {
+        fetch('https://sams-academy-plus.onrender.com/api/results')
+          .then(res => res.json())
+          .then(data => {
+            setResults(data.filter(r => r.student_email === email));
+            setLoading(false);
+          })
+          .catch(() => setLoading(false));
+      }
+    }
+  }, [isLoaded, isSignedIn, user]);
+
+  if (!isLoaded) return <div className="min-h-screen flex items-center justify-center text-xl">Loading...</div>;
+
+  return (
+    <div className="max-w-4xl mx-auto p-6 mt-8">
+      <h1 className="text-3xl font-bold mb-6">Student Dashboard</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-xl border shadow-sm">
+          <h2 className="text-gray-500 text-sm">Tests Taken</h2>
+          <p className="text-3xl font-bold text-brand-600">{results.length}</p>
+        </div>
+        <div className="bg-white p-6 rounded-xl border shadow-sm">
+          <h2 className="text-gray-500 text-sm">Account</h2>
+          <p className="text-lg font-bold">{user?.primaryEmailAddress?.emailAddress || 'Student'}</p>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+        <h2 className="text-xl font-bold p-6 border-b bg-gray-50">My Test History</h2>
+        {loading ? (
+          <p className="p-6">Loading results...</p>
+        ) : results.length === 0 ? (
+          <p className="p-6 text-gray-500">You haven't taken any tests yet.</p>
+        ) : (
+          <table className="w-full text-left">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="p-4 border-b">Test Name</th>
+                <th className="p-4 border-b">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.map(r => (
+                <tr key={r.id} className="border-b">
+                  <td className="p-4">{r.test_title}</td>
+                  <td className="p-4 font-bold text-brand-600">{r.score} / {r.total_questions}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+};
 export default function App() {
     const { user } = useUser();
       const [homeSearch, setHomeSearch] = useState('');
@@ -40,10 +104,9 @@ export default function App() {
       window.location.href = `/materials?search=${encodeURIComponent(homeSearch)}`;
     }
   };
-   // Dashboard Route
-    // Dashboard Route
+         // Dashboard Route
   if (window.location.pathname === '/dashboard') {
-    return <Dashboard />;
+    return <MiniDashboard />;
   }
   // 1. Admin Route
     if (window.location.pathname === '/admin') {
