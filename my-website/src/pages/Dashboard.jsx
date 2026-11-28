@@ -8,7 +8,7 @@ export default function Dashboard() {
   const [loadingResults, setLoadingResults] = useState(true);
   const [streak, setStreak] = useState(1);
 
-  // 1. Calculate Streak (Safe, runs once)
+  // 1. Calculate Streak
   useEffect(() => {
     const today = new Date().toDateString();
     const lastVisit = localStorage.getItem('sams_last_visit');
@@ -31,10 +31,11 @@ export default function Dashboard() {
     }
   }, []);
 
-  // 2. Fetch Results (Only runs when Clerk is fully loaded)
+  // 2. Fetch Results
   useEffect(() => {
     if (isLoaded && isSignedIn && user) {
-      const email = user.primaryEmailAddress?.emailAddress;
+      // Safest way to get the email
+      const email = user.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : null;
       
       if (email) {
         fetch('https://sams-academy-plus.onrender.com/api/results')
@@ -54,8 +55,7 @@ export default function Dashboard() {
     }
   }, [isLoaded, isSignedIn, user]);
 
-  // --- THE CRUCIAL FIX ---
-  // If Clerk hasn't loaded the user yet, show a spinner instead of crashing.
+  // Show spinner if Clerk is still loading
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -65,7 +65,7 @@ export default function Dashboard() {
     );
   }
 
-  // If somehow not signed in, show a message
+  // Safe fallback if not signed in
   if (!isSignedIn) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -75,10 +75,6 @@ export default function Dashboard() {
     );
   }
 
-  // Safe variables
-  const displayEmail = user?.primaryEmailAddress?.emailAddress || 'Student';
-  const displayName = user?.firstName || displayEmail.split('@')[0];
-  
   const averageScore = results.length > 0 
     ? Math.round((results.reduce((acc, curr) => acc + (curr.score / curr.total_questions), 0) / results.length) * 100) 
     : 0;
@@ -90,12 +86,12 @@ export default function Dashboard() {
       </a>
 
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-2xl font-bold border-2 border-brand-500 uppercase">
-          {displayName.charAt(0)}
+        <div className="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-2xl font-bold border-2 border-brand-500">
+          🎓
         </div>
         <div>
-          <h1 className="text-3xl font-display font-bold text-gray-900">Welcome back!</h1>
-          <p className="text-gray-500">{displayEmail}</p>
+          <h1 className="text-3xl font-display font-bold text-gray-900">Student Dashboard</h1>
+          <p className="text-gray-500">Track your progress and test history.</p>
         </div>
       </div>
 
