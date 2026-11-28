@@ -51,41 +51,128 @@ function StudentDashboard() {
     fetch('https://sams-academy-plus.onrender.com/api/results')
       .then(res => res.json())
       .then(data => {
-        // Filter only this student's results
         const myResults = Array.isArray(data)
           ? data.filter(r => r.student_email === email)
           : [];
+        // Sort newest first
+        myResults.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setResults(myResults);
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, [isLoaded, user]);
 
+  // Calculate current streak (consecutive days with at least one test)
+  const calculateStreak = () => {
+    if (results.length === 0) return 0;
+
+    // Get unique dates (YYYY-MM-DD) of tests, newest first
+    const uniqueDays = [...new Set(
+      results.map(r => new Date(r.created_at).toDateString())
+    )];
+
+    let streak = 0;
+    let currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    for (let i = 0; i < uniqueDays.length; i++) {
+      const testDate = new Date(uniqueDays[i]);
+      testDate.setHours(0, 0, 0, 0);
+
+      const diffDays = Math.floor((currentDate - testDate) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === streak) {
+        streak++;
+        // Move expected date one day back
+        currentDate.setDate(currentDate.getDate() - 1);
+      } else if (diffDays > streak) {
+        break; // gap found
+      }
+    }
+
+    return streak;
+  };
+
+  const streak = calculateStreak();
+  const totalTests = results.length;
+  const bestScore = results.length > 0
+    ? Math.max(...results.map(r => Math.round((r.score / r.total_questions) * 100)))
+    : 0;
+
   return (
     <div className="max-w-4xl mx-auto p-6 mt-8">
       <a href="/" className="inline-flex items-center text-brand-600 hover:underline mb-6 font-medium">
-        &larr; Back to Home
+        ← Back to Home
       </a>
-      <h1 className="text-3xl font-bold mb-6">Student Dashboard</h1>
 
+      <h1 className="text-3xl font-bold mb-2">Student Dashboard</h1>
+      <p className="text-gray-500 mb-8">
+        Welcome back, {user?.firstName || user?.fullName || 'Student'}!
+      </p>
+
+      {/* ===== STREAK BADGE ===== */}
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-2xl p-6 mb-8 shadow-lg relative overflow-hidden">
+        <div className="relative z-10 flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium opacity-90 mb-1">Your Daily Streak</p>
+            <h2 className="text-4xl font-extrabold flex items-center gap-3">
+              🔥 {streak}-Day Streak!
+            </h2>
+            <p className="mt-2 text-orange-100 text-sm">
+              {streak === 0
+                ? "Take a test today to start your streak!"
+                : streak < 3
+                ? "Great start! Keep going every day."
+                : streak < 7
+                ? "You're on fire! Don't break the chain."
+                : "Legendary consistency! 🏆"}
+            </p>
+          </div>
+          <div className="text-6xl opacity-30">🔥</div>
+        </div>
+      </div>
+
+      {/* ===== QUICK STATS ===== */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div className="bg-white p-5 rounded-xl border shadow-sm text-center">
+          <p className="text-gray-500 text-sm">Tests Taken</p>
+          <p className="text-3xl font-bold text-brand-600">{totalTests}</p>
+        </div>
+        <div className="bg-white p-5 rounded-xl border shadow-sm text-center">
+          <p className="text-gray-500 text-sm">Best Score</p>
+          <p className="text-3xl font-bold text-green-600">{bestScore}%</p>
+        </div>
+        <div className="bg-white p-5 rounded-xl border shadow-sm text-center">
+          <p className="text-gray-500 text-sm">Current Streak</p>
+          <p className="text-3xl font-bold text-orange-500">{streak} days</p>
+        </div>
+      </div>
+
+      {/* ===== ACCOUNT STATUS ===== */}
       <div className="bg-white p-6 rounded-xl border shadow-sm mb-6">
         <h2 className="text-gray-500 text-sm">Account Status</h2>
         <p className="text-lg font-bold text-green-600">Logged In Successfully</p>
         <p className="text-sm text-gray-500">
-          {user?.primaryEmailAddress?.emailAddress || 'Student'}
+          {user?.primaryEmailAddress?.emailAddress}
         </p>
       </div>
 
+      {/* ===== TEST HISTORY ===== */}
       <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
         <h2 className="text-xl font-bold p-6 border-b bg-gray-50">My Test History</h2>
 
         {loading ? (
           <p className="p-6 text-gray-500">Loading results...</p>
         ) : results.length === 0 ? (
-          <p className="p-6 text-gray-500">
-            You haven't taken any tests yet. Go to the{' '}
-            <a href="/tests" className="text-brand-600 underline">Tests page</a> to attempt one!
-          </p>
+          <div className="p-8 text-center">
+            <p className="text-gray-500 mb-4">You haven't taken any tests yet.</p>
+            <a
+              href="/tests"
+              className="inline-block px-6 py-3 bg-brand-600 text-white rounded-lg font-bold hover:bg-brand-700 transition"
+            >
+              Start Your First Test →
+            </a>
+          </div>
         ) : (
           <table className="w-full text-left">
             <thead className="bg-gray-50">
@@ -96,17 +183,20 @@ function StudentDashboard() {
               </tr>
             </thead>
             <tbody>
-              {results.map(r => (
+              {results.map((r) => (
                 <tr key={r.id} className="border-b hover:bg-gray-50">
                   <td className="p-4 font-medium">{r.test_title}</td>
                   <td className="p-4 font-bold text-brand-600">
                     {r.score} / {r.total_questions}
+                    <span className="ml-2 text-sm text-gray-500">
+                      ({Math.round((r.score / r.total_questions) * 100)}%)
+                    </span>
                   </td>
                   <td className="p-4 text-gray-500">
                     {new Date(r.created_at).toLocaleDateString('en-IN', {
                       day: 'numeric',
                       month: 'short',
-                      year: 'numeric'
+                      year: 'numeric',
                     })}
                   </td>
                 </tr>
